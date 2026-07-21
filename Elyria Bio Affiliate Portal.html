@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Elyria Bio — Affiliate Portal</title>
+<meta name="description" content="Affiliate portal for Elyria Bio partners — track clicks, conversions, commissions, and payouts." />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="admin.css" />
+<link rel="stylesheet" href="portal.css" />
+</head>
+<body>
+
+<nav class="p-nav">
+  <div class="p-nav-in">
+    <div class="p-brand">
+      <span class="p-glyph" aria-hidden="true">
+        <svg viewBox="0 0 30 30" fill="none"><defs><linearGradient id="elg" x1="4" y1="4" x2="26" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#fdeec0"/><stop offset=".5" stop-color="#e7c06a"/><stop offset="1" stop-color="#a9792f"/></linearGradient></defs><path d="M6 5C16.5 9 13.5 21 24 25" stroke="url(#elg)" stroke-width="1.5" stroke-linecap="round"/><path d="M24 5C13.5 9 16.5 21 6 25" stroke="url(#elg)" stroke-width="1.5" stroke-linecap="round"/><path d="M15 13.6C13 9 18 8.4 18.6 6.4" stroke="url(#elg)" stroke-width="1" stroke-linecap="round" opacity=".5"/></svg>
+      </span>
+      <div>
+        <div class="p-brand-name">Elyria</div>
+        <div class="p-brand-sub">Affiliate Portal</div>
+      </div>
+    </div>
+    <div class="p-nav-sp"></div>
+    <div class="p-user">
+      <div class="pu-meta">
+        <div class="pu-name" id="meName">—</div>
+        <div class="pu-tier" id="meTier">—</div>
+      </div>
+      <span class="p-av" id="meAv">—</span>
+    </div>
+  </div>
+</nav>
+
+<div class="portal">
+  <header class="p-hero">
+    <div class="p-eyebrow">Welcome back</div>
+    <h1>Your affiliate dashboard</h1>
+    <p>Share your link, drive research customers to Elyria Bio, and earn commission on every order — credited on a 30-day cookie window.</p>
+
+    <div class="reflink">
+      <div class="rl-box code">
+        <div class="rl-body">
+          <div class="rl-k">Your referral code</div>
+          <div class="rl-v" id="refCode">—</div>
+        </div>
+        <button class="abtn ghost" id="copyCode">Copy</button>
+      </div>
+      <div class="rl-box">
+        <div class="rl-body">
+          <div class="rl-k">Your referral link</div>
+          <div class="rl-v link" id="refLink">—</div>
+        </div>
+        <button class="abtn solid" id="copyLink">Copy link</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="complianceBar"></div>
+
+  <div class="p-grid4" id="statGrid"></div>
+
+  <div class="p-grid2">
+    <div class="card">
+      <div class="panel-head"><div><h3>Commission earned</h3><div class="ph-sub">Daily · last 30 days</div></div></div>
+      <div class="chart-wrap" id="earnChart"></div>
+    </div>
+    <div class="card" id="tierCard"></div>
+  </div>
+
+  <div class="p-grid2">
+    <div class="card" style="padding:0">
+      <div class="panel-head" style="padding:20px 20px 0"><div><h3>Recent referrals</h3></div></div>
+      <div class="tbl-wrap" style="border:none">
+        <table><thead><tr><th>Order</th><th>Date</th><th>Status</th><th class="t-num">Order total</th><th class="t-num">You earn</th></tr></thead>
+        <tbody id="refBody"></tbody></table>
+      </div>
+    </div>
+    <div class="card" id="payoutPanel"></div>
+  </div>
+
+  <h2 class="p-section-title">Marketing assets</h2>
+  <div class="asset-grid" id="assetGrid"></div>
+
+  <h2 class="p-section-title">Swipe copy</h2>
+  <div id="swipeList"></div>
+
+  <footer class="p-foot">
+    <span class="ruo">Research Use Only</span>
+    <span>Commissions paid monthly · $50 minimum · 30-day cookie · Net-30 on delivered orders.</span>
+    <a href="Elyria Bio Affiliate Program.html">Program terms →</a>
+    <a href="Elyria Bio Affiliate Guidelines.html">Compliance guidelines →</a>
+  </footer>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="admin-data.js" defer></script>
+<script src="admin-charts.js" defer></script>
+<script src="portal.js" defer></script>
+<script src="search.js" defer></script>
+</body>
+</html>

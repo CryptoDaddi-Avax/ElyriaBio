@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Page not found — Elyria Bio</title>
+<meta name="description" content="Page not found. Browse research peptides, certificates of analysis, and batch lookup at Elyria Bio." />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<meta name="robots" content="noindex, follow" />
+<meta name="theme-color" content="#060504" />
+<meta name="color-scheme" content="dark" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="store.css" />
+<link rel="stylesheet" href="pages.css" />
+<style>
+.nf-wrap{min-height:62vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px}
+.nf-wrap .nf-code{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(96px,20vw,220px);line-height:.9;letter-spacing:-.02em;background:linear-gradient(180deg,#fdeec0,#e7c06a 55%,#a9792f);-webkit-background-clip:text;background-clip:text;color:transparent;margin:0}
+.nf-kick{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--mist-2,#8a8375);margin:0 0 18px}
+.nf-wrap h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(26px,4vw,38px);color:var(--paper,#f4efe6);margin:20px 0 10px;letter-spacing:-.01em}
+.nf-wrap p{color:var(--mist,#a49b8c);font-size:16px;max-width:520px;margin:0 auto 30px;line-height:1.6}
+.nf-acts{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.nf-links{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:40px}
+.nf-chip{font-size:13px;color:var(--mist,#a49b8c);border:1px solid rgba(255,255,255,.13);border-radius:22px;padding:9px 18px;text-decoration:none;transition:border-color .16s,color .16s}
+.nf-chip:hover{border-color:rgba(231,192,106,.5);color:var(--paper,#f4efe6)}
+</style>
+</head>
+<body data-home="index.html">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+<div class="promobar" id="promobar" role="note"><div class="wrap promobar-in"><p class="promo-msg"><span class="pdot"></span><span>Free shipping over $150 · Free express over $250</span></p><span class="ruo-tag mono">Research Use Only · Not for human consumption</span><button class="promo-x" id="promoClose" aria-label="Dismiss announcement"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></div>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <button class="hamburger magnetic" id="hamburger" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    <a href="index.html" class="brand magnetic" aria-label="Elyria Bio home">
+      <span class="glyph" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none"><defs><linearGradient id="elg" x1="4" y1="4" x2="26" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#fdeec0"/><stop offset=".5" stop-color="#e7c06a"/><stop offset="1" stop-color="#a9792f"/></linearGradient></defs><path d="M6 5C16.5 9 13.5 21 24 25" stroke="url(#elg)" stroke-width="1.5" stroke-linecap="round"/><path d="M24 5C13.5 9 16.5 21 6 25" stroke="url(#elg)" stroke-width="1.5" stroke-linecap="round"/><path d="M15 13.6C13 9 18 8.4 18.6 6.4" stroke="url(#elg)" stroke-width="1" stroke-linecap="round" opacity=".5"/></svg></span>
+      <span class="brand-lock"><span class="brand-name">Elyria</span><span class="brand-sub">Bio</span></span>
+    </a>
+    <form class="search" id="searchForm" role="search">
+      <svg class="s-ic" viewBox="0 0 24 24" fill="none" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="searchInput" type="search" placeholder="Search peptides, CAS no…" aria-label="Search catalog" autocomplete="off" />
+    </form>
+    <nav class="navlinks" aria-label="Primary">
+      <a href="index.html#catalog" class="magnetic">Shop</a>
+      <a href="index.html#verification" class="magnetic">Verification</a>
+      <a href="resources/batch-lookup.html" class="magnetic">Batch lookup</a>
+      <a href="company/contact.html" class="magnetic">Contact</a>
+      <a href="affiliate.html" class="magnetic">Affiliate</a>
+      <a href="account.html" class="magnetic">Account</a>
+    </nav>
+    <button class="cart-btn magnetic" id="cartBtn" aria-label="Open cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" aria-hidden="true"><path d="M3 4h2l2.5 12.5a1 1 0 0 0 1 .8h8.7a1 1 0 0 0 1-.8L21 8H6"/><circle cx="9.5" cy="20" r="1.2"/><circle cx="17.5" cy="20" r="1.2"/></svg>
+      <span class="cart-count" id="cartCount" aria-live="polite" aria-atomic="true">0</span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <button class="mclose" id="mClose" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <a href="index.html#catalog" data-mlink>Shop</a>
+  <a href="index.html#verification" data-mlink>Verification</a>
+  <a href="resources/batch-lookup.html" data-mlink>Batch lookup</a>
+  <a href="company/contact.html" data-mlink>Contact</a>
+  <a href="affiliate.html" data-mlink>Affiliate program</a>
+  <a href="account.html" data-mlink>Account</a>
+</div>
+
+<main class="page-main" id="main-content">
+  <div class="nf-wrap">
+    <p class="nf-kick">Error 404 · Lot not found</p>
+    <p class="nf-code">404</p>
+    <h1>This page didn't pass QC.</h1>
+    <p>The address you followed doesn't resolve to anything in our catalog. It may have been moved, retired, or mistyped — search the catalog or head back to the storefront.</p>
+    <div class="nf-acts">
+      <button class="btn btn-solid magnetic" id="nfSearch">Search the catalog</button>
+      <a class="btn btn-ghost magnetic" href="index.html">Back to storefront</a>
+    </div>
+    <div class="nf-links">
+      <a class="nf-chip" href="collections/repair.html">Repair</a>
+      <a class="nf-chip" href="collections/metabolic.html">Metabolic</a>
+      <a class="nf-chip" href="collections/longevity.html">Longevity</a>
+      <a class="nf-chip" href="collections/growth.html">Growth</a>
+      <a class="nf-chip" href="resources/batch-lookup.html">Verify a lot</a>
+    </div>
+  </div>
+</main>
+
+<footer><div class="wrap">
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <div class="brand"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none"><defs><linearGradient id="elgF" x1="4" y1="4" x2="26" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#fdeec0"/><stop offset=".5" stop-color="#e7c06a"/><stop offset="1" stop-color="#a9792f"/></linearGradient></defs><path d="M6 5C16.5 9 13.5 21 24 25" stroke="url(#elgF)" stroke-width="1.5" stroke-linecap="round"/><path d="M24 5C13.5 9 16.5 21 6 25" stroke="url(#elgF)" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="brand-lock"><span class="brand-name">Elyria</span><span class="brand-sub">Bio</span></span></div>
+      <p>Research-grade peptide reference materials, characterized and documented for laboratory use by qualified professionals.</p>
+    </div>
+    <div class="foot-col"><h5>Shop</h5><a href="collections/peptides.html">All peptides</a><a href="collections/repair.html">Repair</a><a href="collections/metabolic.html">Metabolic</a><a href="collections/longevity.html">Longevity</a></div>
+    <div class="foot-col"><h5>Account</h5><a href="account.html">My account</a><a href="account.html#orders">Orders</a><a href="account.html#documents">Certificates</a><a href="affiliate.html">Affiliate program</a></div>
+    <div class="foot-col"><h5>Resources</h5><a href="resources/certificates.html">Certificates of analysis</a><a href="resources/batch-lookup.html">Batch lookup</a><a href="company/about.html">About</a><a href="company/contact.html">Contact</a><a href="legal/terms.html">Terms of sale</a><a href="legal/compliance.html">Compliance</a></div>
+  </div>
+  <div class="legal"><strong>Research Use Only — Legal Notice</strong> All products offered by Elyria Bio are sold strictly as in-vitro laboratory research materials for use by qualified research professionals and institutions. Nothing on this site is a drug, supplement, or medical device, and no product is for human or veterinary use.</div>
+</div></footer>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script src="site.js" defer></script>
+<script src="search.js" defer></script>
+<script src="compliance.js" defer></script>
+<script>
+document.getElementById("nfSearch").addEventListener("click", function(){ if(window.ElyriaSearch) window.ElyriaSearch.open(""); });
+</script>
+</body>
+</html>

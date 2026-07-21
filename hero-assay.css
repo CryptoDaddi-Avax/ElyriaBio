@@ -1,0 +1,153 @@
+/* ============================================================
+   ELYRIA BIO — "THE LIVING ASSAY" HERO
+   A self-assembling luminous peptide double-helix (canvas),
+   editorial Fraunces headline, and a live assay chip.
+   Palette locked to the house gold-on-abyss tokens.
+   Owns only .ha-* classes — reuses global .btn / .eyebrow.
+   ============================================================ */
+
+.ha-scroll{position:relative;background:var(--abyss);height:100svh;min-height:640px}
+@supports (height:100dvh){ .ha-scroll{height:100dvh} }
+
+.ha-stage{position:relative;width:100%;height:100%;overflow:hidden;
+  background:radial-gradient(120% 90% at 62% 42%,#12100b 0%,#0a0807 46%,#060504 100%)}
+
+/* base glow — shows before/without JS and under reduced-motion */
+.ha-fallback{position:absolute;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(46% 52% at 62% 46%,rgba(var(--accent-rgb),.20),transparent 62%),
+  radial-gradient(80% 60% at 50% 106%,rgba(176,122,42,.16),transparent 60%),
+  radial-gradient(60% 50% at 8% -8%,rgba(var(--accent-rgb),.08),transparent 60%)}
+
+.ha-canvas{position:absolute;inset:0;z-index:1;width:100%;height:100%;display:block}
+
+/* legibility scrim — darkens the left/edges so type stays crisp over the helix */
+.ha-scrim{position:absolute;inset:0;z-index:2;pointer-events:none;background:
+  linear-gradient(90deg,rgba(6,5,4,.92) 0%,rgba(6,5,4,.66) 26%,rgba(6,5,4,.12) 48%,transparent 62%),
+  linear-gradient(180deg,rgba(6,5,4,.72) 0%,transparent 22%,transparent 62%,rgba(6,5,4,.86) 100%)}
+
+/* ---------------- content ---------------- */
+.ha-content{position:relative;z-index:3;height:100%;max-width:1280px;margin:0 auto;
+  padding:calc(var(--promo-h) + var(--nav-h) + 30px) 28px 132px;
+  display:flex;flex-direction:column;justify-content:center}
+.ha-col{max-width:610px;display:flex;flex-direction:column;align-items:flex-start;gap:22px}
+
+/* eyebrow with a live pulse */
+.ha-eyebrow{display:inline-flex;align-items:center;gap:11px;opacity:0;transform:translateY(10px);
+  animation:haRise .8s var(--ease-out) .15s forwards}
+.ha-eyebrow .ha-live{position:relative;width:7px;height:7px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 0 0 rgba(var(--accent-rgb),.6)}
+.ha-eyebrow .ha-live::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--accent);
+  animation:haPing 2.4s var(--ease-out) infinite}
+@keyframes haPing{0%{transform:scale(1);opacity:.7}70%,100%{transform:scale(3.4);opacity:0}}
+
+/* headline — editorial Fraunces, luminous */
+.ha-h1{font-family:"Fraunces",serif;font-weight:500;color:var(--paper);
+  font-size:clamp(44px,7.1vw,104px);line-height:.98;letter-spacing:-.018em;margin:0;
+  text-wrap:balance;text-shadow:0 2px 40px rgba(0,0,0,.55)}
+.ha-h1 .ha-em{font-style:italic;font-weight:400;color:#f2e6cf}
+.ha-h1 .ha-accent{position:relative;font-style:italic;font-weight:500;
+  background:linear-gradient(100deg,#b9954e 0%,#f6e1a4 30%,#fff6dc 46%,#e7c06a 62%,#b9954e 100%);
+  background-size:230% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:haSheen 6s linear infinite}
+.ha-h1 .ha-accent::after{content:"";position:absolute;left:.02em;right:.16em;bottom:.02em;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(var(--accent-rgb),.85),transparent);
+  transform:scaleX(0);transform-origin:left;animation:haUnderline 1s var(--ease-out) 1.05s forwards}
+@keyframes haSheen{0%{background-position:190% 0}100%{background-position:-50% 0}}
+@keyframes haUnderline{to{transform:scaleX(1)}}
+
+.ha-lede{font-size:clamp(15.5px,1.34vw,18.5px);line-height:1.62;color:var(--mist);max-width:50ch;margin:0;
+  opacity:0;transform:translateY(10px);animation:haRise .9s var(--ease-out) .34s forwards}
+.ha-lede b{color:var(--paper);font-weight:500}
+
+.ha-cta{display:flex;gap:13px;flex-wrap:wrap;align-items:center;
+  opacity:0;transform:translateY(10px);animation:haRise .9s var(--ease-out) .46s forwards}
+.ha-cta .btn{padding:15px 27px}
+
+@keyframes haRise{to{opacity:1;transform:none}}
+
+/* ---------------- live assay chip ---------------- */
+.ha-chip{position:absolute;right:34px;bottom:118px;z-index:4;width:290px;
+  padding:17px 18px 16px;border-radius:16px;
+  background:linear-gradient(180deg,rgba(20,16,11,.72),rgba(11,9,7,.66));
+  border:1px solid rgba(var(--accent-rgb),.18);
+  box-shadow:0 24px 60px -18px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter:blur(11px) saturate(1.1);-webkit-backdrop-filter:blur(11px) saturate(1.1);
+  opacity:0;transform:translateY(16px) scale(.98);animation:haRise 1s var(--ease-out) .8s forwards;
+  font-family:"IBM Plex Mono",monospace}
+.ha-chip.pulse{animation:haChipPulse 1.1s var(--ease-out)}
+@keyframes haChipPulse{0%{box-shadow:0 24px 60px -18px rgba(0,0,0,.8),0 0 0 0 rgba(var(--accent-rgb),.5),inset 0 1px 0 rgba(255,255,255,.05)}
+  100%{box-shadow:0 24px 60px -18px rgba(0,0,0,.8),0 0 0 22px rgba(var(--accent-rgb),0),inset 0 1px 0 rgba(255,255,255,.05)}}
+
+.ha-chip-head{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding-bottom:12px;margin-bottom:13px;border-bottom:1px solid rgba(var(--accent-rgb),.14)}
+.ha-chip-title{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-dim)}
+.ha-chip-lot{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.08em;color:var(--paper)}
+.ha-chip-lot .dot{width:6px;height:6px;border-radius:50%;background:#5fd28c;box-shadow:0 0 8px #5fd28c;
+  animation:haBlink 1.6s steps(1) infinite}
+@keyframes haBlink{0%,62%{opacity:1}63%,100%{opacity:.28}}
+
+.ha-purity{display:flex;align-items:flex-end;gap:8px;line-height:1}
+.ha-purity .num{font-family:"Fraunces",serif;font-weight:500;font-size:47px;color:var(--paper);
+  letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.ha-purity .unit{font-size:12px;color:var(--accent);letter-spacing:.04em;padding-bottom:8px}
+.ha-purity-lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist);margin-top:3px}
+
+.ha-trace{position:relative;width:100%;height:44px;margin:12px 0 13px}
+.ha-trace canvas{position:absolute;inset:0;width:100%;height:100%}
+
+.ha-chip-foot{display:flex;flex-direction:column;gap:7px}
+.ha-chip-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:10.5px}
+.ha-chip-row span{color:var(--mist);letter-spacing:.02em}
+.ha-chip-row b{color:var(--paper);font-weight:500;display:inline-flex;align-items:center;gap:5px}
+.ha-chip-row b.ok{color:#7ad39a}
+.ha-chip-row b svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.4}
+
+/* ---------------- trust strip ---------------- */
+.ha-trust{position:absolute;left:0;right:0;bottom:0;z-index:3;
+  border-top:1px solid var(--line);
+  background:linear-gradient(180deg,transparent,rgba(6,5,4,.5))}
+.ha-trust-in{max-width:1280px;margin:0 auto;padding:19px 28px;
+  display:flex;align-items:center;gap:14px 44px;flex-wrap:wrap}
+.ha-t{display:flex;flex-direction:column;gap:2px;opacity:0;transform:translateY(8px);
+  animation:haRise .7s var(--ease-out) forwards}
+.ha-t:nth-child(1){animation-delay:.9s}.ha-t:nth-child(2){animation-delay:1s}
+.ha-t:nth-child(3){animation-delay:1.1s}.ha-t:nth-child(4){animation-delay:1.2s}
+.ha-t .tv{font-family:"Fraunces",serif;font-weight:500;font-size:20px;color:var(--paper);line-height:1}
+.ha-t .tv b{color:var(--accent);font-weight:500}
+.ha-t .tl{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-dim)}
+.ha-trust-tag{margin-left:auto;display:inline-flex;align-items:center;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);
+  opacity:0;animation:haRise .7s var(--ease-out) 1.3s forwards}
+.ha-trust-tag .bar{width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--accent-dim))}
+
+/* scroll cue */
+.ha-cue{position:absolute;left:50%;bottom:84px;transform:translateX(-50%);z-index:4;
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-dim);
+  opacity:0;animation:haRise 1s var(--ease-out) 1.4s forwards;pointer-events:none}
+.ha-cue svg{width:17px;height:17px;stroke:var(--accent);fill:none;stroke-width:1.6;animation:haBob 1.9s var(--ease-out) infinite}
+@keyframes haBob{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(5px);opacity:1}}
+
+/* ---------------- responsive ---------------- */
+@media(max-width:1120px){ .ha-chip{bottom:120px;right:26px} }
+@media(max-width:980px){
+  .ha-stage{background:radial-gradient(130% 80% at 50% 30%,#12100b,#0a0807 52%,#060504)}
+  .ha-scrim{background:linear-gradient(180deg,rgba(6,5,4,.7) 0%,rgba(6,5,4,.25) 30%,rgba(6,5,4,.35) 62%,rgba(6,5,4,.9) 100%)}
+  .ha-content{padding:calc(var(--promo-h) + var(--nav-h) + 22px) 22px 150px;justify-content:flex-start;padding-top:clamp(120px,20vh,220px)}
+  .ha-col{max-width:none;align-items:center;text-align:center}
+  .ha-lede{margin-inline:auto}.ha-cta{justify-content:center}
+  .ha-chip{display:none}
+  .ha-cue{display:none}
+}
+@media(max-width:560px){
+  .ha-trust-in{gap:12px 26px;padding:15px 20px}
+  .ha-t .tv{font-size:17px}.ha-t:nth-child(4){display:none}
+  .ha-trust-tag{display:none}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .ha-h1 .ha-accent{animation:none;background-position:40% 0}
+  .ha-h1 .ha-accent::after{animation:none;transform:scaleX(1)}
+  .ha-eyebrow,.ha-lede,.ha-cta,.ha-chip,.ha-t,.ha-trust-tag,.ha-cue{animation:none;opacity:1;transform:none}
+  .ha-eyebrow .ha-live::after,.ha-chip-lot .dot,.ha-cue svg{animation:none}
+}

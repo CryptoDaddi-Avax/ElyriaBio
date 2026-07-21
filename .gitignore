@@ -1,0 +1,31 @@
+# ── Build / temp ───────────────────────────────────────────
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+
+# ── Dev-only folders (not for production or public repo) ───
+_archive/
+scraps/
+audit/
+
+# ── Internal / non-public files ────────────────────────────
+CLAUDE.md
+.thumbnail
+llms.txt
+
+# ── Secrets (never commit real keys) ───────────────────────
+# backend-config.js is safe to commit — it contains only empty placeholders.
+# If you ever paste real Supabase keys into it locally, add it here:
+# backend-config.js
+
+# ── OS / editor junk ───────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,71 @@
+/* ===== Elyria Bio — visual upgrades (v2 prototype) ===== */
+
+/* ---------- 1. Cursor rim-lighting ---------- */
+.rimlit{ position:relative; }
+.rimlit::after{
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  pointer-events:none; z-index:2; opacity:0; transition:opacity .35s ease;
+  background:
+    radial-gradient(calc(var(--rim-size,520) * 1px) circle at var(--mx,50%) var(--my,50%),
+      rgba(253,238,192, calc(var(--rim-int,.09))), transparent 62%);
+}
+.rimlit::before{
+  content:""; position:absolute; inset:-1px; border-radius:inherit;
+  pointer-events:none; z-index:2; opacity:0; transition:opacity .35s ease;
+  padding:1px; -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+  background:
+    radial-gradient(calc(var(--rim-size,520) * .7px) circle at var(--mx,50%) var(--my,50%),
+      rgba(231,192,106, calc(var(--rim-int,.09) * 5)), transparent 70%);
+}
+.rimlit.rim-on::after, .rimlit.rim-on::before{ opacity:1; }
+body[data-fx-rim="off"] .rimlit::after,
+body[data-fx-rim="off"] .rimlit::before{ display:none; }
+
+/* ---------- 2. Self-drawing chromatogram ---------- */
+.chromo{
+  margin-top:14px; border:1px solid rgba(231,192,106,.14); border-radius:14px;
+  background:linear-gradient(180deg, rgba(253,238,192,.02), rgba(0,0,0,.25));
+  padding:18px 18px 12px; overflow:hidden; position:relative;
+}
+.chromo-head{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+.chromo-title{ font-family:"IBM Plex Mono", monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:rgba(253,238,192,.55); }
+.chromo-lot{ font-family:"IBM Plex Mono", monospace; font-size:10.5px; color:rgba(255,255,255,.35); }
+.chromo canvas{ display:block; width:100%; height:150px; }
+.chromo-apex{
+  position:absolute; font-family:"Fraunces", serif; font-weight:500;
+  font-size:30px; color:#fdeec0; letter-spacing:-.02em; line-height:1;
+  opacity:0; transform:translate(-50%,-4px);
+  transition:opacity .6s ease .1s, transform .6s cubic-bezier(.2,.8,.2,1) .1s;
+  text-shadow:0 0 24px rgba(231,192,106,.45);
+}
+.chromo-apex small{ font-size:12px; font-family:"IBM Plex Mono", monospace; color:rgba(253,238,192,.6); display:block; margin-top:3px; letter-spacing:.1em; }
+.chromo.drawn .chromo-apex{ opacity:1; transform:translate(-50%,-12px); }
+body[data-fx-chromo="off"] .chromo{ display:none; }
+
+/* ---------- 3. Add-to-cart arc ---------- */
+.cart-fly{
+  position:fixed; z-index:9999; pointer-events:none; will-change:transform,opacity;
+  width:54px; height:84px; border-radius:8px; overflow:hidden;
+  filter:drop-shadow(0 6px 18px rgba(231,192,106,.35));
+}
+.cart-fly img{ width:100%; height:100%; object-fit:cover; }
+.cart-fly .fly-vial{ width:100%; height:100%; background:linear-gradient(180deg,#b9b9bd 0 16%, rgba(230,232,238,.35) 16% 26%, rgba(24,24,26,.9) 26%); border:1px solid rgba(255,255,255,.25); border-radius:8px; }
+@keyframes cartPop{
+  0%{ transform:scale(1); } 30%{ transform:scale(1.35) rotate(-4deg); }
+  55%{ transform:scale(.92); } 75%{ transform:scale(1.08); } 100%{ transform:scale(1); }
+}
+.cart-btn.popped{ animation:cartPop .55s cubic-bezier(.2,.8,.2,1); }
+
+/* ---------- 4. Powder motes ---------- */
+.motes-canvas{ position:absolute; inset:0; z-index:1; pointer-events:none; }
+body[data-fx-motes="off"] .motes-canvas{ display:none; }
+
+/* ---------- 5. Foil shimmer on brand glyph ---------- */
+@keyframes foil{ 0%,100%{ filter:brightness(1) saturate(1); } 50%{ filter:brightness(1.45) saturate(1.25); } }
+body:not([data-fx-shimmer="off"]) .brand .glyph svg{ animation:foil 5.5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce){
+  .rimlit::after,.rimlit::before{ transition:none; }
+  body .brand .glyph svg{ animation:none; }
+}

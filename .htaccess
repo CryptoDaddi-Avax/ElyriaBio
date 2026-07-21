@@ -1,0 +1,91 @@
+# ============================================================
+# Elyria Bio — Apache .htaccess for Hostinger
+# Generated from _headers (Netlify format → Apache format)
+# ============================================================
+
+# ── HTTPS redirect ──────────────────────────────────────────
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ── www → non-www (canonical) ───────────────────────────────
+RewriteCond %{HTTP_HOST} ^www\.elyriabio\.com [NC]
+RewriteRule ^(.*)$ https://elyriabio.com/$1 [L,R=301]
+
+# ── Security headers ────────────────────────────────────────
+<IfModule mod_headers.c>
+  # Clickjacking: nothing on this site should ever be framed
+  Header always set X-Frame-Options "DENY"
+
+  # Stop MIME-type sniffing
+  Header always set X-Content-Type-Options "nosniff"
+
+  # Don't leak full URLs to third parties
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # This site never needs these browser capabilities
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+
+  # HTTPS only, one year
+  Header always set Strict-Transport-Security "max-age=31536000"
+
+  # Content-Security-Policy
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://images.pexels.com https://*.supabase.co; media-src 'self' https://videos.pexels.com; connect-src 'self' https://*.supabase.co https://api.resend.com; frame-src https://js.stripe.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+</IfModule>
+
+# ── Custom 404 ───────────────────────────────────────────────
+ErrorDocument 404 /404.html
+
+# ── MIME types ───────────────────────────────────────────────
+<IfModule mod_mime.c>
+  AddType image/svg+xml .svg .svgz
+  AddType application/javascript .js .mjs
+  AddType text/css .css
+  AddType application/json .json
+  AddType font/woff2 .woff2
+  AddType font/woff .woff
+</IfModule>
+
+# ── Compression (gzip) ───────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+# ── Browser caching ──────────────────────────────────────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # HTML — short cache (content changes)
+  ExpiresByType text/html                 "access plus 1 hour"
+  # CSS / JS — medium cache (versioned by filename if needed)
+  ExpiresByType text/css                  "access plus 1 week"
+  ExpiresByType application/javascript    "access plus 1 week"
+  # Images — long cache
+  ExpiresByType image/jpeg                "access plus 1 month"
+  ExpiresByType image/png                 "access plus 1 month"
+  ExpiresByType image/svg+xml             "access plus 1 month"
+  ExpiresByType image/webp                "access plus 1 month"
+  # Fonts — very long cache
+  ExpiresByType font/woff2                "access plus 1 year"
+  ExpiresByType font/woff                 "access plus 1 year"
+</IfModule>
+
+# ── Block access to sensitive files ─────────────────────────
+<FilesMatch "\.(env|log|sql|md|json)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# Allow peptide-data.json (public product data used by the store)
+<Files "peptide-data.json">
+  Order allow,deny
+  Allow from all
+</Files>
+
+# Block _headers (not needed by Apache, just tidy)
+<Files "_headers">
+  Order allow,deny
+  Deny from all
+</Files>
+
+# ── Directory listing off ────────────────────────────────────
+Options -Indexes

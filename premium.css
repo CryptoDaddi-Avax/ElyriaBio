@@ -1,0 +1,132 @@
+/* ============================================================
+   ELYRIA BIO — PREMIUM REFINEMENT LAYER
+   Loaded last. Non-destructive polish over store.css:
+   type rhythm · motion discipline · card finish · statement
+   moment · lot-provenance thread · scrollbars · footer calm.
+   ============================================================ */
+
+/* ---- 1. TYPE RHYTHM & MEASURE ------------------------------
+   Wider body leading, honest reading measure, calmer headings. */
+body{line-height:1.62;letter-spacing:.002em}
+.logi-card p,.step .stxt p,.account p,.foot-brand p{line-height:1.66;max-width:52ch;text-wrap:pretty}
+.sec-head h2,.cat-head h2,.verify-head h2,.account h2{text-wrap:balance;letter-spacing:.085em}
+.card-desc,.qv-desc{text-wrap:pretty}
+/* section eyebrows get a hairline lead-in so labels feel set, not floated */
+.sec-head .eyebrow,.cat-head .eyebrow,.verify-head .eyebrow,.cats-head .eyebrow,.account-in .eyebrow{
+  display:inline-flex;align-items:center;gap:12px}
+.sec-head .eyebrow::before,.cat-head .eyebrow::before,.verify-head .eyebrow::before,
+.cats-head .eyebrow::before,.account-in .eyebrow::before{
+  content:"";width:26px;height:1px;background:linear-gradient(90deg,transparent,rgba(var(--accent-rgb),.6))}
+.sec-head .eyebrow::after,.cat-head .eyebrow::after,.verify-head .eyebrow::after,
+.cats-head .eyebrow::after,.account-in .eyebrow::after{
+  content:"";width:26px;height:1px;background:linear-gradient(90deg,rgba(var(--accent-rgb),.6),transparent)}
+
+/* ---- 2. MOTION DISCIPLINE ----------------------------------
+   One vocabulary: short 8px rise + fade, no blur. Quieter dust. */
+.rv{transform:translate3d(0,10px,0)!important;filter:none!important;
+  transition:opacity .6s var(--ease-out),transform .6s var(--ease-out)!important}
+.rv.in{transform:none!important}
+.h-anim{filter:none!important;transform:translate3d(0,10px,0)}
+.loaded .h-anim{transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)!important}
+.dust-canvas{opacity:.34!important}
+
+/* ---- 3. STATEMENT MOMENT -----------------------------------
+   A single oversized line on near-empty space between the
+   verification proof and logistics. Earns its whitespace. */
+.statement{position:relative;padding:132px 0;text-align:center;overflow:hidden;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:radial-gradient(120% 100% at 50% 0,rgba(var(--accent-rgb),.05),transparent 62%)}
+.statement::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);
+  width:min(760px,80%);height:1px;background:linear-gradient(90deg,transparent,rgba(var(--accent-rgb),.5),transparent)}
+.statement-in{max-width:1080px;margin:0 auto;padding:0 28px}
+.statement .kicker{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--accent-dim);display:block;margin-bottom:26px}
+.statement h2{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(34px,5.4vw,72px);
+  line-height:1.06;letter-spacing:-.015em;color:var(--paper);text-wrap:balance}
+.statement h2 em{font-style:italic;color:var(--accent)}
+.statement .prov{margin-top:36px;display:inline-flex;align-items:center;gap:14px;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}
+.statement .prov .pv-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 10px var(--accent);flex:none}
+.statement .prov b{color:var(--paper);font-weight:500}
+@media(max-width:680px){.statement{padding:88px 0}.statement .prov{flex-direction:column;gap:8px}}
+
+/* ---- 4. CATALOG CARD FINISH --------------------------------
+   More air, a slow specular sweep on hover, consistent radii. */
+.grid{gap:24px}
+.card{border-radius:18px}
+.card-body{padding:18px 19px 0}
+.card-actions{padding:0 19px 20px}
+/* slow diagonal specular sweep over the product bay on hover */
+.card-vis::before{content:"";position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,246,214,.16) 50%,transparent 60%);
+  transform:translateX(-120%);transition:opacity .3s}
+.card:hover .card-vis::before{opacity:1;animation:cardSpec 1.15s var(--ease-out)}
+@keyframes cardSpec{0%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+@media (prefers-reduced-motion: reduce){.card-vis::before{display:none}}
+
+/* ---- 5. QUICK-VIEW: LEAD WITH THE ASSAY --------------------
+   A designed purity artifact injected at the top of qv-info. */
+.qv-assay{display:flex;align-items:stretch;gap:0;margin:18px 0 6px;border:1px solid rgba(var(--accent-rgb),.28);
+  border-radius:14px;overflow:hidden;background:linear-gradient(180deg,rgba(var(--accent-rgb),.07),rgba(var(--accent-rgb),.02))}
+.qv-assay .qa-num{flex:none;min-width:118px;padding:16px 18px;display:flex;flex-direction:column;justify-content:center;
+  border-right:1px solid rgba(var(--accent-rgb),.22);background:rgba(var(--accent-rgb),.05)}
+.qv-assay .qa-big{font-family:"Fraunces",serif;font-weight:500;font-size:34px;line-height:1;color:var(--accent)}
+.qv-assay .qa-cap{font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent-dim);margin-top:7px}
+.qv-assay .qa-meta{flex:1;padding:14px 16px;display:flex;flex-direction:column;justify-content:center;gap:7px}
+.qv-assay .qa-line{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--paper)}
+.qv-assay .qa-line svg{width:15px;height:15px;stroke:var(--accent);flex:none}
+.qv-assay .qa-line span{color:var(--mist)}
+.qv-assay .qa-lot{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--accent-dim)}
+.qv-assay .qa-view{align-self:flex-start;margin-top:2px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid rgba(var(--accent-rgb),.4);
+  padding-bottom:1px;transition:color .15s,border-color .15s}
+.qv-assay .qa-view:hover{color:var(--paper);border-color:var(--paper)}
+@media(max-width:520px){.qv-assay{flex-direction:column}.qv-assay .qa-num{flex-direction:row;align-items:baseline;gap:12px;
+  border-right:none;border-bottom:1px solid rgba(var(--accent-rgb),.22)}.qv-assay .qa-cap{margin-top:0}}
+
+/* ---- 6. COA MODAL POLISH -----------------------------------
+   Give the certificate a touch more paper presence. */
+.coa{box-shadow:0 50px 130px -30px rgba(0,0,0,.9),0 0 0 1px rgba(var(--accent-rgb),.14)}
+.coa-stamp{box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.14)}
+.coa-tests tbody tr{transition:background .15s}
+.coa-tests tbody tr:hover{background:rgba(var(--accent-rgb),.04)}
+
+/* ---- 7. GLOBAL SCROLLBAR -----------------------------------
+   Quiet gold thumb on the void, matching the account/admin kits. */
+html{scrollbar-width:thin;scrollbar-color:rgba(231,192,106,.22) transparent}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(231,192,106,.18);border-radius:10px;
+  border:3px solid var(--abyss);background-clip:content-box}
+::-webkit-scrollbar-thumb:hover{background:rgba(231,192,106,.34);background-clip:content-box}
+
+/* ---- 8. FOCUS RINGS ----------------------------------------
+   Softer, on-brand focus that follows the corner radius. */
+:focus-visible{outline:2px solid rgba(var(--accent-rgb),.9);outline-offset:3px}
+.btn:focus-visible,.add-btn:focus-visible,.checkout-btn:focus-visible,
+.pill:focus-visible,.cart-btn:focus-visible{outline-offset:4px;border-radius:100px}
+
+/* ---- 9. EMPTY CART: warmer, more composed --------------------- */
+.cart-empty .ec{width:72px;height:72px;box-shadow:0 0 0 6px rgba(var(--accent-rgb),.03)}
+.cart-empty h4{font-size:22px}
+.cart-empty p{font-size:13.5px;max-width:26ch;line-height:1.6}
+
+/* ---- 10. FOOTER: quiet closing statement -------------------
+   More breathing room, calmer links, a provenance line. */
+footer{padding:104px 0 44px}
+.foot-grid{gap:56px;margin-bottom:64px}
+.foot-brand p{line-height:1.7;color:var(--mist)}
+.foot-col a{padding:8px 0;font-size:13.5px;position:relative;width:fit-content}
+.foot-col a::after{content:"";position:absolute;left:0;bottom:5px;height:1px;width:0;
+  background:var(--accent-dim);transition:width .25s var(--ease-out)}
+.foot-col a:hover::after{width:100%}
+.foot-provenance{display:flex;align-items:center;gap:13px;flex-wrap:wrap;
+  padding:22px 0 0;margin-top:8px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--mist)}
+.foot-provenance .fp-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 9px var(--accent);flex:none}
+.foot-provenance b{color:var(--paper);font-weight:500}
+.foot-provenance .fp-sep{width:1px;height:11px;background:var(--line)}

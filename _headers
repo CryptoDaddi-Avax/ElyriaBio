@@ -1,0 +1,18 @@
+# Elyria Bio — security headers (Netlify / Cloudflare Pages format)
+# Deploying elsewhere (S3+CloudFront, nginx)? Mirror these in that host's config.
+
+/*
+  # Clickjacking: nothing on this site should ever be framed
+  X-Frame-Options: DENY
+  # Stop MIME-type sniffing
+  X-Content-Type-Options: nosniff
+  # Don't leak full URLs to third parties
+  Referrer-Policy: strict-origin-when-cross-origin
+  # This site never needs these browser capabilities
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  # HTTPS only, one year (add includeSubDomains only after confirming all subdomains are HTTPS)
+  Strict-Transport-Security: max-age=31536000
+  # Content-Security-Policy: only self-hosted code may run; only Google Fonts CSS/fonts
+  # and the Pexels hero video may load externally. Inline scripts are used by the site,
+  # hence 'unsafe-inline' (no third-party JS exists anywhere, so injection surface stays small).
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://images.pexels.com; media-src 'self' https://videos.pexels.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
