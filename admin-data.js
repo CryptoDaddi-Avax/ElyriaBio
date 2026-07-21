@@ -321,7 +321,7 @@
     });
 
     var aff = buildAffiliates(orders, r);
-    return { orders: orders, customers: Object.values(custMap), lots: lots, affiliates: aff.affiliates, applications: aff.applications, tiers: aff.tiers };
+    return { orders: [], customers: [], lots: [], affiliates: [], applications: [], tiers: aff.tiers };
   }
 
   /* ---------- persistence ---------- */
@@ -330,42 +330,24 @@
   };
   var KEY = "elyria_admin_v1";
   function loadState() {
-    var built = build();
     var saved;
     try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) { saved = null; }
-    // only persist status overrides + discount edits (keep dataset deterministic)
-    if (saved && saved.statusOverrides) {
-      built.orders.forEach(function (o) {
-        if (saved.statusOverrides[o.id]) o.status = saved.statusOverrides[o.id];
-      });
-    }
+
     var discounts = (saved && saved.discounts) ? saved.discounts : JSON.parse(JSON.stringify(DISCOUNTS));
-    // recompute discount usage from orders
-    discounts.forEach(function (dc) {
-      dc.uses = built.orders.filter(function (o) { return o.code === dc.code && o.status !== "cancelled"; }).length;
-      dc.revenue = built.orders.filter(function (o) { return o.code === dc.code && o.status !== "cancelled" && o.status !== "refunded"; })
-        .reduce(function (a, o) { return a + o.total; }, 0);
-    });
-    // affiliate persistence: status changes, approved applications, recorded payouts
-    var affOverrides = (saved && saved.affOverrides) || {};
-    built.affiliates.forEach(function (a) { if (affOverrides[a.id]) a.status = affOverrides[a.id]; });
-    var approvedApps = (saved && saved.approvedApps) || {};
-    built.applications = built.applications.filter(function (ap) { return !approvedApps[ap.id]; });
     var stockOverrides = (saved && saved.stockOverrides) || {};
-    var products = PRODUCTS.map(function (p) { return stockOverrides[p.id] != null ? Object.assign({}, p, { stock: stockOverrides[p.id] }) : p; });
-    // conduct strikes (one seeded example until edited)
-    var strikes = (saved && saved.strikes) ? saved.strikes : JSON.parse(JSON.stringify(SEED_STRIKES));
-    built.affiliates.forEach(function (a) {
-      a.strikes = strikes[a.id] || [];
-      a.suspended = a.strikes.some(function (s) { return s.severity === "severe"; }) || a.strikes.length >= 3;
-      a.frozen = a.suspended || a.strikes.some(function (s) { return s.severity === "major"; });
-      if (a.suspended) a.status = "suspended";
-      else if (a.frozen && a.status !== "suspended") a.status = "paused";
+
+    // Stock starts at 0 — real numbers come from Supabase
+    var products = PRODUCTS.map(function (p) {
+      var s = stockOverrides[p.id] != null ? stockOverrides[p.id] : 0;
+      return Object.assign({}, p, { stock: s });
     });
-    return { orders: built.orders, customers: built.customers, lots: built.lots, products: products, discounts: discounts,
-      affiliates: built.affiliates, applications: built.applications, tiers: built.tiers,
-      statusOverrides: (saved && saved.statusOverrides) || {}, affOverrides: affOverrides, approvedApps: approvedApps, strikes: strikes,
-      stockOverrides: stockOverrides };
+
+    return {
+      orders: [], customers: [], lots: [], affiliates: [], applications: [],
+      tiers: AFF_TIERS, products: products, discounts: discounts,
+      statusOverrides: {}, affOverrides: {}, approvedApps: {}, strikes: {},
+      stockOverrides: stockOverrides
+    };
   }
   function setStock(state, id, qty) {
     qty = Math.max(0, parseInt(qty, 10) || 0);
