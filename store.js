@@ -421,7 +421,7 @@ function priceHTML(p){
 
 /* ===================== RENDER GRID ===================== */
 var grid = document.getElementById("grid");
-var COMING_SOON = {tirz:1, ipa:1, nad:1, mt1:1, mt2:1, aod:1, pt141:1, amino1mq:1, kiss:1, epi:1, semax:1, selank:1, dsip:1, gluta:1, ta1:1, snap8:1, glow:1, igf1lr3:1, cjcipa:1, kpv:1, wolverine:1};
+var COMING_SOON = {tirz:1, ipa:1, nad:1, mt1:1, mt2:1, aod:1, pt141:1, amino1mq:1, kiss:1, epi:1, semax:1, selank:1, dsip:1, gluta:1, ta1:1, snap8:1, glow:1, igf1lr3:1, cjcipa:1, kpv:1, wolverine:1, cagri:1};
 function buildCard(p){
   var card = document.createElement("article");
   card.className = "card rv";
