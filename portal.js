@@ -10,6 +10,21 @@
   var ME = "AF-1001"; // the "logged-in" affiliate
   var a = state.affiliates.filter(function (x) { return x.id === ME; })[0];
 
+  /* ── No affiliate account yet — show a clean empty state ── */
+  if (!a) {
+    var shell = document.querySelector(".shell");
+    if (shell) shell.innerHTML =
+      "<div style='display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;gap:18px;padding:40px 20px'>"
+      + "<svg style='width:52px;height:52px;opacity:.35' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.4'><circle cx='12' cy='8' r='4'/><path d='M4 20c0-4 3.6-7 8-7s8 3 8 7'/></svg>"
+      + "<div>"
+      + "<h2 style='font-family:Fraunces,serif;font-weight:500;font-size:22px;margin:0 0 8px'>No affiliate account found</h2>"
+      + "<p style='color:var(--mist);font-size:14px;max-width:360px;margin:0 auto 24px'>Your partner account hasn't been set up yet. Apply to the Elyria Bio affiliate programme to get your referral code and start earning.</p>"
+      + "<a href='Elyria Bio Affiliate Program.html' class='abtn solid' style='display:inline-flex'>Apply to the programme</a>"
+      + "</div>"
+      + "</div>";
+    return;
+  }
+
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   function money(n, dec) { return "$" + (n || 0).toLocaleString("en-US", { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 }); }

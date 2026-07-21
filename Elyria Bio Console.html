@@ -130,7 +130,7 @@
   var KEY="elyria_ops_unlocked";
   var HASH="26f5aa9cf5e3094bbb82e370e2948ff374fb58c9def67e6a76dabbf9a3541bfb";
   var SCRIPTS=["backend-config.js","supabase-client.js","admin-data.js","admin-charts.js","admin.js","search.js"];
-  var CB="?v=20260721d";
+  var CB="?v=20260721e";
   function boot(){var i=0;(function next(){if(i>=SCRIPTS.length)return;var s=document.createElement("script");s.src=SCRIPTS[i++]+CB;s.onload=next;document.body.appendChild(s);})();}
   var ok=false; try{ ok=sessionStorage.getItem(KEY)==="1"; }catch(e){}
   if(ok){ boot(); return; }
