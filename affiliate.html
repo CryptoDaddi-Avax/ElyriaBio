@@ -105,7 +105,7 @@
     <p class="sub rv">Share the supplier that shows its work. Earn <b style="color:var(--paper)">10%</b> on every referred order — with no caps and a 30-day attribution window.</p>
     <div class="aff-lp-cta rv">
       <a href="account.html#affiliate" class="btn btn-solid magnetic">Become an affiliate<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <a href="#calculator" class="btn btn-ghost magnetic">Estimate your earnings</a>
+
     </div>
     <div class="bignum-row rv" style="display:flex;justify-content:center;gap:40px;max-width:760px;margin:54px auto 0">
       <div class="bignum"><div class="bv">10%</div><div class="bk">Every order</div><div class="bd">On every referred order, always</div></div>
@@ -124,49 +124,23 @@
   </div>
 </section></div>
 
-<!-- calculator -->
-<div class="wrap" id="calculator"><section class="section">
-  <div class="pane-head"><div><h2>Earnings calculator</h2><p>Estimate your monthly commission. Most referred labs reorder every 4–8 weeks.</p></div></div>
-  <div class="calc">
-    <div class="calc-controls">
-      <div class="cc-field"><label>New labs referred / month <b id="lblLabs">6</b></label><input class="crange" id="rngLabs" type="range" min="1" max="40" value="6" /></div>
-      <div class="cc-field"><label>Avg. first order <b id="lblFirst">$120</b></label><input class="crange" id="rngFirst" type="range" min="40" max="400" step="5" value="120" /></div>
-      <div class="cc-field"><label>Reorders / lab per month <b id="lblReorder">1.5</b></label><input class="crange" id="rngReorder" type="range" min="0" max="4" step="0.5" value="1.5" /></div>
-      <div class="cc-field"><label>Avg. reorder value <b id="lblRval">$90</b></label><input class="crange" id="rngRval" type="range" min="40" max="400" step="5" value="90" /></div>
-    </div>
-    <div class="calc-out">
-      <div class="co-k mlabel">Estimated monthly commission</div>
-      <div class="co-big" id="calcMonthly">$0</div>
-      <div class="co-per" id="calcSplit">— first · — recurring</div>
-      <div class="co-year">Annualized, with a compounding referral base<b id="calcYear">$0</b></div>
-    </div>
-  </div>
-  <p class="aff-note" style="text-align:center;margin-top:16px">Illustrative only. Recurring commission compounds as your referred labs keep reordering month over month.</p>
-</section></div>
 
 <!-- tiers / terms -->
 <div class="wrap"><section class="section">
-  <div class="pane-head"><div><h2>The terms, plainly</h2><p>No fine-print games. Here’s exactly what you earn and how.</p></div></div>
-  <div class="tier-grid">
-    <div class="tier feat"><div class="tname">First order</div><div class="trate">20<span>%</span></div><p class="tdesc">Paid on the subtotal of each referred customer’s very first purchase.</p>
+  <div class="pane-head"><div><h2>The terms, plainly</h2><p>No fine-print games. Here's exactly what you earn and how.</p></div></div>
+  <div class="tier-grid" style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap">
+    <div class="tier feat"><div class="tname">Every order</div><div class="trate">10<span>%</span></div><p class="tdesc">Paid on every referred order — first purchase or repeat, for the life of the account.</p>
       <ul>
         <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>Credited automatically</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>Customer also gets 10% off</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>No cap on referrals</li>
       </ul>
     </div>
-    <div class="tier"><div class="tname">Every reorder</div><div class="trate">10<span>%</span></div><p class="tdesc">Paid on every subsequent order that customer places — for the life of the account.</p>
-      <ul>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>Recurring, lifetime</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>Passive once referred</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>Compounds month over month</li>
-      </ul>
-    </div>
     <div class="tier"><div class="tname">Payouts</div><div class="trate">$50<span> min</span></div><p class="tdesc">Withdraw as instant store credit with no minimum, or cash out monthly.</p>
       <ul>
         <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>Store credit — instant, no minimum</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>PayPal or USDC — monthly</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>60-day attribution window</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg>30-day attribution window</li>
       </ul>
     </div>
   </div>
