@@ -421,6 +421,7 @@ function priceHTML(p){
 
 /* ===================== RENDER GRID ===================== */
 var grid = document.getElementById("grid");
+var COMING_SOON = {tirz:1, ipa:1, nad:1, mt1:1, mt2:1, aod:1, pt141:1, amino1mq:1, kiss:1, epi:1, semax:1, selank:1, dsip:1, gluta:1, ta1:1, snap8:1, glow:1, igf1lr3:1, cjcipa:1, kpv:1, wolverine:1};
 function buildCard(p){
   var card = document.createElement("article");
   card.className = "card rv";
@@ -429,12 +430,12 @@ function buildCard(p){
   var stockCls = p.stock==="low" ? "stock low" : "stock";
   var stockTxt = p.stock==="low" ? "Low stock" : "In stock";
   card.innerHTML =
-    '<div class="card-vis">'+
-      '<div class="card-badges">'+badgeHTML(p)+'</div>'+
-      '<button class="card-fav'+(favs[p.id]?" on":"")+'" data-fav="'+p.id+'" aria-label="Save '+p.name+'"><svg viewBox="0 0 24 24" stroke-width="1.7"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></button>'+
-      '<button class="card-cmp'+(compare.indexOf(p.id)>-1?" on":"")+'" data-cmp="'+p.id+'" aria-label="Compare '+p.name+'" title="Add to compare"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M16 3l4 4-4 4M20 7H8M8 21l-4-4 4-4M4 17h12"/></svg></button>'+
-      vialHTML(p)+
-      '<button class="qv-trigger" data-qv="'+p.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Quick view</button>'+
+      '<div class="card-vis'+(COMING_SOON[p.id]?' cs-vis':'')+'">'+
+        '<div class="card-badges">'+badgeHTML(p)+'</div>'+
+        '<button class="card-fav'+(favs[p.id]?" on":"")+'" data-fav="'+p.id+'" aria-label="Save '+p.name+'"><svg viewBox="0 0 24 24" stroke-width="1.7"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></button>'+
+        '<button class="card-cmp'+(compare.indexOf(p.id)>-1?" on":"")+'" data-cmp="'+p.id+'" aria-label="Compare '+p.name+'" title="Add to compare"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M16 3l4 4-4 4M20 7H8M8 21l-4-4 4-4M4 17h12"/></svg></button>'+
+        (COMING_SOON[p.id] ? '<div class="cs-wrap">'+vialHTML(p)+'<div class="cs-overlay"><strong>Coming Soon</strong></div></div>' : vialHTML(p))+
+        '<button class="qv-trigger" data-qv="'+p.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Quick view</button>'+
       (p.supply?'':'<div class="card-analytics" title="Current lot analytics"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7z"/><path d="M9 12l2 2 4-4"/></svg><div class="ca-meta"><span class="ca-pur">'+p.purity+' HPLC</span><span class="ca-lot">Lot '+lotInfo(p).lot+' · verified</span></div></div>')+
     '</div>'+
     '<div class="card-body">'+
@@ -446,7 +447,7 @@ function buildCard(p){
       '<p class="card-desc">'+p.desc+'</p>'+
       '<div class="card-foot">'+
         sizeSelHTML(p)+
-        '<div class="card-priceline"><div class="card-price" data-price="'+p.id+'">'+cardPriceHTML(p, cardSize[p.id])+'</div><span class="'+stockCls+'"><span class="sdot"></span>'+stockTxt+'</span></div>'+
+        '<div class="card-priceline"><div class="card-price'+(COMING_SOON[p.id]?' cs-price':'')+' " data-price="'+p.id+'">'+cardPriceHTML(p, cardSize[p.id])+'</div><span class="'+stockCls+'"><span class="sdot"></span>'+stockTxt+'</span></div>'+
         (p.supply?'':'<button class="card-coa" data-coatoggle="'+p.id+'" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M5 3h9l5 5v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M9 13l2 2 4-4"/></svg>View certificate of analysis</button><div class="coa-inline" data-coainline="'+p.id+'" hidden></div>')+
       '</div>'+
     '</div>'+
