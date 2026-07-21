@@ -9,6 +9,6 @@
      anon public   -> anonKey   (safe to expose; it is the PUBLIC key)
    ===================================================================== */
 window.ELYRIA_BACKEND = {
-  url:     "",   // e.g. "https://abcdefgh.supabase.co"
-  anonKey: ""    // e.g. "eyJhbGciOi..."
+  url:     "https://ppedkulxwgswxioevqve.supabase.co",
+  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwZWRrdWx4d2dzd3hpb2V2cXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ2NDc5MTUsImV4cCI6MjEwMDIyMzkxNX0.xnjgfljSoTHQO6YH3bMNS9cWwXc7lbk5464j5B5Hx1s"
 };
