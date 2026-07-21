@@ -1103,7 +1103,7 @@ function advActive(){ return fPurity>0 || fSizeSel.length>0 || fStock || fPermg!
 function advCount(){ return (fPurity>0?1:0)+(fSizeSel.length?1:0)+(fStock?1:0)+(fPermg!=="any"?1:0); }
 /* home page shows only the 6 most popular until “Shop all peptides” is clicked (or a filter/search is used) */
 var POPULAR = ["ghkcu","bpc157","ipa","tirz","nad","tb500"];
-var expanded = false;
+var expanded = true;
 var shopToolbar = document.querySelector(".shop-toolbar");
 var shopAllWrap = document.getElementById("shopAllWrap");
 var shopAllBtn = document.getElementById("shopAll");
@@ -1111,6 +1111,7 @@ function setExpanded(v){
   expanded = v;
   if(shopAllWrap) shopAllWrap.hidden = v;
 }
+if(shopAllWrap) shopAllWrap.hidden = true;
 
 function matches(p){
   if(!expanded) return POPULAR.indexOf(p.id) > -1;
