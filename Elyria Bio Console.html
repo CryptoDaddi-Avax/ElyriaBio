@@ -128,7 +128,7 @@
 <script>
 (function(){
   var KEY="elyria_ops_unlocked";
-  var HASH="5b055da519cd697cbd1f575206cc50657b32f03457bf09eec551a04c1b90f8b4";
+  var HASH="26f5aa9cf5e3094bbb82e370e2948ff374fb58c9def67e6a76dabbf9a3541bfb";
   var SCRIPTS=["backend-config.js","supabase-client.js","admin-data.js","admin-charts.js","admin.js","search.js"];
   function boot(){var i=0;(function next(){if(i>=SCRIPTS.length)return;var s=document.createElement("script");s.src=SCRIPTS[i++];s.onload=next;document.body.appendChild(s);})();}
   var ok=false; try{ ok=sessionStorage.getItem(KEY)==="1"; }catch(e){}
