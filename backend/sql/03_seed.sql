@@ -7,7 +7,7 @@ insert into products (id,slug,name,category,cas,size,price,cost,purity,stock,reo
   ('reta','glp-3','GLP-3','metabolic','CAS 2381089-83-2','10 mg',55.99,21,'99.0%',22,35,'new'),
   ('bpc157','bpc-157','BPC-157','repair','CAS 137525-51-0','10 mg',39.99,9.4,'99.4%',412,120,'bestseller'),
   ('tb500','tb-500','TB-500','repair','CAS 885340-08-9','10 mg',44.99,9.8,'99.2%',286,120,''),
-  ('ghkcu','ghk-cu','GHK-Cu','longevity','CAS 89030-95-5','50 mg',29.99,6.1,'99.6%',540,150,'bestseller'),
+  ('ghkcu','ghk-cu','GHK-Cu','longevity','CAS 89030-95-5','50 mg',23.99,6.1,'99.6%',540,150,'bestseller'),
   ('ipa','ipamorelin','Ipamorelin','growth','CAS 170851-70-4','10 mg',39.99,11.2,'99.5%',318,120,''),
   ('tesa','tesamorelin','Tesamorelin','growth','CAS 218949-48-5','10 mg',49.99,19,'99.2%',96,60,''),
   ('cjcipa','cjc-1295-ipamorelin','CJC-1295/Ipamorelin','growth','CAS 863288-34-0 / 170851-70-4','10 mg',47.99,14.5,'99.3%',174,90,'new'),
