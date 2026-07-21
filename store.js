@@ -452,10 +452,10 @@ function buildCard(p){
       '</div>'+
     '</div>'+
     '<div class="card-actions">'+
-      '<div class="stepper" aria-label="Quantity for '+p.name+'">'+
-        '<button type="button" data-step="-1" data-id="'+p.id+'" aria-label="Decrease quantity">−</button>'+
-        '<span class="qty mono" data-qty="'+p.id+'">1</span>'+
-        '<button type="button" data-step="1" data-id="'+p.id+'" aria-label="Increase quantity">+</button>'+
+      '<div class="pack-sel" data-packsel="'+p.id+'">'+
+        '<button type="button" class="pack-btn on" data-packqty="1" data-id="'+p.id+'">1 vial</button>'+
+        '<button type="button" class="pack-btn" data-packqty="3" data-id="'+p.id+'">3-pack<span class="pack-disc">−8%</span></button>'+
+        '<button type="button" class="pack-btn" data-packqty="5" data-id="'+p.id+'">5-pack<span class="pack-disc">−15%</span></button>'+
       '</div>'+
       '<button class="add-btn" data-add="'+p.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 5v14M5 12h14"/></svg>Add to cart</button>'+
     '</div>';
@@ -491,6 +491,28 @@ var ORIGINAL_ORDER = cards.slice();
 
 /* ===================== GRID EVENTS (delegated) ===================== */
 grid.addEventListener("click", function(e){
+  var packBtn = e.target.closest("[data-packqty]");
+  if(packBtn){
+    var pid = packBtn.getAttribute("data-id");
+    var qty = parseInt(packBtn.getAttribute("data-packqty"), 10);
+    cardQty[pid] = qty;
+    // update active state on buttons
+    var sel = grid.querySelector('[data-packsel="'+pid+'"]');
+    if(sel) sel.querySelectorAll('.pack-btn').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-packqty')==String(qty)); });
+    // update price display to show discounted price
+    var pr = grid.querySelector('[data-price="'+pid+'"]');
+    if(pr){
+      var p2 = product(pid);
+      var rate = volumeRate(qty);
+      if(rate > 0){
+        var discPrice = p2.price * (1 - rate);
+        pr.innerHTML = '<span class="price">'+fmt(discPrice)+'</span><span class="price-compare">'+fmt(p2.price)+'</span><span class="price-size">/ '+p2.size+' · '+qty+'×</span>';
+      } else {
+        pr.innerHTML = cardPriceHTML(p2, cardSize[pid]);
+      }
+    }
+    return;
+  }
   var step = e.target.closest("[data-step]");
   if(step){
     var id = step.getAttribute("data-id");
