@@ -252,12 +252,7 @@
   function lsGet(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } }
   var PAY_META = { btc: ["\u20BF", "Bitcoin"], eth: ["\u039E", "Ethereum"], usdc: ["$", "USDC"], venmo: ["V", "Venmo"] };
-  var DEMO_PAY = [
-    { id: "LMB-26B-1051", cust: "K. Moreau", email: "k.moreau@helixlabs.io", method: "btc", total: 214.50, ref: "3f8a19c2\u20264e0b7", hasShot: true, ts: Date.now() - 2 * 3600e3, state: "submitted" },
-    { id: "LMB-26B-1049", cust: "T. Okafor", email: "t.okafor@gmail.com", method: "venmo", total: 96.00, ref: "@t-okafor \u00b7 note LMB-26B-1049", hasShot: true, ts: Date.now() - 9 * 3600e3, state: "submitted" },
-    { id: "LMB-26B-1046", cust: "S. Lindqvist", email: "s.lindqvist@uu.se", method: "usdc", total: 388.25, ref: "0x74d1\u20269a2c", hasShot: false, ts: Date.now() - 26 * 3600e3, state: "confirmed" },
-    { id: "LMB-26B-1044", cust: "J. Barrett", email: "jbarrett@outlook.com", method: "eth", total: 152.00, ref: "", hasShot: false, ts: Date.now() - 2 * 86400e3, state: "awaiting" }
-  ];
+  var DEMO_PAY = [];
   function payRowsAll() {
     var live = lsGet("elyria_orders", []).filter(function (o) { return o.pay; }).map(function (o) {
       return {

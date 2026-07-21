@@ -93,14 +93,7 @@
   }
 
   var STATUSES = ["paid", "verifying", "packing", "shipped", "delivered", "refunded", "cancelled"];
-  var DISCOUNTS = [
-    { code: "RESEARCH10", type: "pct", value: 10, uses: 0, cap: 0, status: "active", desc: "Sitewide 10% off" },
-    { code: "LAB15", type: "pct", value: 15, uses: 0, cap: 500, status: "active", desc: "Institutional accounts" },
-    { code: "COLDSHIP", type: "ship", value: 0, uses: 0, cap: 0, status: "active", desc: "Free cold-chain shipping" },
-    { code: "WELCOME5", type: "fixed", value: 5, uses: 0, cap: 0, status: "active", desc: "First-order $5 off" },
-    { code: "LOT26B", type: "pct", value: 20, uses: 0, cap: 200, status: "paused", desc: "New lot 26-B launch" },
-    { code: "BULK25", type: "pct", value: 25, uses: 0, cap: 0, status: "active", desc: "Orders over $300" }
-  ];
+  var DISCOUNTS = [];
 
   /* ---------- affiliate program ---------- */
   var AFF_CHANNELS = ["YouTube", "Reddit", "Research blog", "Instagram", "Newsletter", "Podcast", "X / Twitter", "Forum", "TikTok"];
