@@ -98,9 +98,7 @@
   /* ---------- affiliate program ---------- */
   var AFF_CHANNELS = ["YouTube", "Reddit", "Research blog", "Instagram", "Newsletter", "Podcast", "X / Twitter", "Forum", "TikTok"];
   var AFF_TIERS = [
-    { id: "starter", name: "Starter", rate: 10, min: 0 },
-    { id: "pro", name: "Pro", rate: 15, min: 4000 },
-    { id: "elite", name: "Elite", rate: 20, min: 12000 }
+    { id: "partner", name: "Partner", rate: 10, min: 0 }
   ];
   function tierFor(rev) {
     for (var i = AFF_TIERS.length - 1; i >= 0; i--) if (rev >= AFF_TIERS[i].min) return AFF_TIERS[i];
