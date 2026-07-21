@@ -32,6 +32,7 @@ var PRODUCTS = [
   {id:"tirz", name:"GLP-2", cat:"metabolic", cas:"CAS 2023788-19-2", size:"10 mg", price:179, compareAt:0, purity:"99.3%", rating:4.8, reviews:156, badge:"popular", stock:"low", endo:"< 0.5 EU/mg", identity:"Confirmed (MS)", photo:"assets/products/glp-2.jpg",
    desc:"Dual GIP/GLP-1 reference peptide for comparative incretin-receptor research models."},
   {id:"reta", name:"GLP-3", cat:"metabolic", cas:"CAS 2381089-83-2", size:"10 mg", price:55.99, compareAt:0, purity:"99.0%", rating:4.5, reviews:74, badge:"new", stock:"low", endo:"< 0.5 EU/mg", identity:"Confirmed (MS)", photo:"assets/products/glp-3.jpg",
+   variants:[{mg:10,size:"10 mg",price:55.99},{mg:15,size:"15 mg",price:69.99},{mg:30,size:"30 mg",price:109.99}],
    desc:"Triple-agonist reference peptide characterized for multi-receptor in-vitro binding studies."},
   {id:"bpc157", name:"BPC-157", cat:"repair", cas:"CAS 137525-51-0", size:"10 mg", price:39.99, compareAt:0, purity:"99.4%", rating:4.8, reviews:212, badge:"bestseller", stock:"in", endo:"< 0.5 EU/mg", identity:"Confirmed (MS)", photo:"assets/products/bpc-157.jpg",
    desc:"Pentadecapeptide studied in vitro for cell-migration and angiogenesis assays in connective-tissue models."},
@@ -99,8 +100,10 @@ function scrollToEl(el){ if(!el) return; var r=el.getBoundingClientRect(); windo
 /* ===================== VARIANTS, KEYS & CATALOG HELPERS ===================== */
 function mgOf(p){ var v=parseFloat(p.size); return (!p.supply && /mg\b/i.test(p.size) && v>0) ? v : 0; }
 function fmtMg(n){ return (Number.isInteger(n)?n:n.toFixed(1))+" mg"; }
-/* Each mg-based peptide is offered as a half-size vial (modest per-mg premium) plus the native size. */
+/* Each mg-based peptide is offered as a half-size vial (modest per-mg premium) plus the native size.
+   Products with a custom `variants` array bypass this logic entirely. */
 function variantsFor(p){
+  if(p.variants) return p.variants;
   var mg=mgOf(p); if(!mg) return null;
   var half=mg/2; if(half<1) return null;
   var halfPrice=Math.round(p.price*0.62*100)/100;
