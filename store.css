@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    ELYRIA BIO — STOREFRONT STYLES
    ============================================================ */
 :root{
@@ -257,6 +257,10 @@ input,select{font-family:inherit}
 .card-name{font-family:"Fraunces",serif;font-weight:500;font-size:22px;letter-spacing:-.01em;line-height:1.1}
 a.card-name{display:block;color:var(--paper);text-decoration:none;transition:color .16s}
 a.card-name:hover{color:var(--accent)}
+/* Stretched link — makes the entire card clickable */
+a.card-name::before{content:"";position:absolute;inset:0;z-index:1}
+/* Raise interactive elements above the stretched-link overlay */
+.card-fav,.card-cmp,.qv-trigger,.card-actions,.card-coa,.card-analytics{position:relative;z-index:2}
 .card-cas{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--mist);margin-top:5px;letter-spacing:.02em}
 .card-prov{display:flex;align-items:center;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-dim);margin-top:8px}
 .card-prov .cp-dot{width:3px;height:3px;border-radius:50%;background:var(--accent-dim);flex:none}
