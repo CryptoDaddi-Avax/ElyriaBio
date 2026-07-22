@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    ELYRIA BIO — STOREFRONT LOGIC
    ============================================================ */
 (function(){
@@ -458,6 +458,12 @@ function buildCard(p){
       '<p class="card-vol-hint">Click product card to view Volume discounts</p>'+
       '<button class="add-btn" data-add="'+p.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 5v14M5 12h14"/></svg>Add to cart</button>'+
     '</div>';
+  /* Make entire card clickable — navigate to product page */
+  card.style.cursor = "pointer";
+  card.addEventListener("click", function(e){
+    if(e.target.closest(".card-fav,.card-cmp,.qv-trigger,.card-actions,.card-coa,.card-analytics,.coa-inline,.add-btn")) return;
+    location.href = purl(p.id);
+  });
   return card;
 }
 /* Sort: available products first, coming-soon last */
