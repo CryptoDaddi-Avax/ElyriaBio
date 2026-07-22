@@ -464,7 +464,9 @@ function buildCard(p){
     '</div>';
   return card;
 }
-PRODUCTS.forEach(function(p){ grid.appendChild(buildCard(p)); });
+/* Sort: available products first, coming-soon last */
+var _sorted = PRODUCTS.slice().sort(function(a,b){ return (COMING_SOON[a.id]?1:0)-(COMING_SOON[b.id]?1:0); });
+_sorted.forEach(function(p){ grid.appendChild(buildCard(p)); });
 var cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
 var ORIGINAL_ORDER = cards.slice();
 
@@ -1207,6 +1209,8 @@ function sortCards(mode){
   else if(mode==="purity-desc") arr.sort(function(a,b){ return parseFloat(product(b.dataset.id).purity) - parseFloat(product(a.dataset.id).purity); });
   else if(mode==="rating-desc") arr.sort(function(a,b){ return product(b.dataset.id).rating - product(a.dataset.id).rating; });
   else if(mode==="name-asc") arr.sort(function(a,b){ return product(a.dataset.id).name.localeCompare(product(b.dataset.id).name); });
+  /* Always push coming-soon products to the bottom regardless of sort mode */
+  arr.sort(function(a,b){ return (COMING_SOON[a.dataset.id]?1:0)-(COMING_SOON[b.dataset.id]?1:0); });
   withFlip(function(){ arr.forEach(function(c){ grid.appendChild(c); }); });
 }
 if(shopAllBtn) shopAllBtn.addEventListener("click", function(e){ e.preventDefault(); setExpanded(true); applyView(); scrollToEl(document.getElementById("catalog")); });
