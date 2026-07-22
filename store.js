@@ -1141,7 +1141,7 @@ function setExpanded(v){
 if(shopAllWrap) shopAllWrap.hidden = true;
 
 function matches(p){
-  if(!expanded) return POPULAR.indexOf(p.id) > -1;
+  /* Always show all products — no POPULAR gate */
   if(currentFilter!=="all" && p.cat!==currentFilter) return false;
   if(searchTerm){
     var hay = (p.name+" "+p.cas+" "+p.cat+" "+p.desc).toLowerCase();
@@ -1901,7 +1901,7 @@ renderCart();
 renderRecent();
 renderCompareTray();
 sortCards(sortSelect.value);
-setExpanded(currentFilter!=="all" || !!searchTerm || advActive() || expandFromURL);
+setExpanded(true);
 if(advActive() && advFilters){ advFilters.hidden=false; if(filtersToggle){ filtersToggle.classList.add("on"); filtersToggle.setAttribute("aria-expanded","true"); } }
 setFilter(currentFilter);
 
