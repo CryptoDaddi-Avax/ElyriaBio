@@ -31,11 +31,14 @@ var METHODS = {
   usdttrc:{ id:"usdttrc", name:"USDT (TRC-20)",  glyph:"\u20AE", net:"TRON network only",
            addr:"TUsFzev9vqDyosdAQ7TttnHW7ZYhpUhMiL", rate:1, unit:"USDT",
            sub:"Tether \u00b7 TRON network only (TRC-20)", live:true },
+  usdtsol:{ id:"usdtsol", name:"USDT (Solana)",   glyph:"\u20AE", net:"Solana network only",
+           addr:"4eKQBoEpw8sQDF6pRgsweaHSKLG26dFPeENTXNcG5cz7", rate:1, unit:"USDT",
+           sub:"Tether \u00b7 Solana network only", live:true },
   venmo: { id:"venmo", name:"Venmo",    glyph:"V",      net:"Venmo",
            addr:"@ElyriaBio", rate:null, unit:null,
            sub:"Friends & family \u00b7 note = order ID" }
 };
-var ORDER = ["btc","eth","usdt","usdttrc","venmo"];
+var ORDER = ["btc","eth","usdt","usdttrc","usdtsol","venmo"];
 
 function enabledIds(){
   var t = loadLS("elyria_pay_enabled", null);
