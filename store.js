@@ -88,7 +88,7 @@ var PRODUCTS = [
    desc:"Four-peptide cellular blend (GHK-Cu, TB-500, BPC-157, KPV) for combined in-vitro repair research."},
   {id:"wolverine", name:"BPC-157 / TB-500 Blend", cat:"repair", cas:"Blend · BPC-157 / TB-500", size:"20 mg", price:79.99, compareAt:0, purity:"99.3%", rating:4.8, reviews:96, badge:"bestseller", stock:"in", endo:"< 0.5 EU/mg", identity:"Confirmed (MS)", photo:"assets/products/bpc-157-tb-500.jpg",
    desc:"Recovery blend pairing BPC-157 and TB-500 for combined in-vitro cell-migration research."},
-  {id:"bacwater", name:"Bacteriostatic Water", cat:"supplies", cas:"Sterile water for injection", size:"30 mL", price:13.59, compareAt:0, purity:"USP", rating:4.9, reviews:418, badge:"bestseller", stock:"in", endo:"USP <1231>", identity:"USP grade", supply:true, photo:"assets/products/bacteriostatic-water.jpg",
+  {id:"bacwater", name:"Bacteriostatic Water", cat:"supplies", cas:"Sterile water for injection", size:"30 mL", price:13.59, compareAt:0, purity:"USP", rating:4.9, reviews:418, badge:"bestseller", stock:"in", endo:"< 0.25 EU/mL", identity:"USP grade", supply:true, photo:"assets/products/bacteriostatic-water.jpg",
    desc:"Multi-dose sterile diluent — water for injection with 0.9% benzyl alcohol — for reconstituting lyophilized research peptides."}
 ];
 function product(id){ for(var i=0;i<PRODUCTS.length;i++){ if(PRODUCTS[i].id===id) return PRODUCTS[i]; } return null; }
@@ -1516,7 +1516,11 @@ try{ window.parent.postMessage({type:"__edit_mode_available"},"*"); }catch(e){}
 function escapeHtml(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
 function hashStr(s){ var h=0; for(var i=0;i<s.length;i++){ h=(h<<5)-h+s.charCodeAt(i); h|=0; } return Math.abs(h); }
+var LOT_OVERRIDES = {
+  bacwater: { lot:"EB61901", assay:"May 14, 2026", exp:"May 14, 2028" }
+};
 function lotInfo(p){
+  if(LOT_OVERRIDES[p.id]) return LOT_OVERRIDES[p.id];
   var h=hashStr(p.id+p.name);
   var lot="LMB-26"+String.fromCharCode(65+(h%6))+"-"+(100+(h%900));
   var assay=new Date(Date.now()-(h%120)*864e5);
