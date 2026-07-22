@@ -43,11 +43,14 @@ var METHODS = {
   usdcbase:{ id:"usdcbase", name:"USDC (Base)",    glyph:"$", net:"Base network only",
            addr:"0x27de3562afdf7f053a94b369D552967ab7426621", rate:1, unit:"USDC",
            sub:"USD Coin \u00b7 Base network only (ERC-20 L2)", live:true },
+  xpay:  { id:"xpay",  name:"X Payments",   glyph:"\u2715", net:"X Payments app",
+           addr:"@TheCryptoDaddi", rate:null, unit:null,
+           sub:"X app \u00b7 include order ID in note", live:true, qr:"assets/xpay-qr.png" },
   venmo: { id:"venmo", name:"Venmo",    glyph:"V",      net:"Venmo",
            addr:"@ElyriaBio", rate:null, unit:null,
            sub:"Friends & family \u00b7 note = order ID" }
 };
-var ORDER = ["btc","eth","usdt","usdttrc","usdtsol","usdc","usdcsol","usdcbase","venmo"];
+var ORDER = ["btc","eth","usdt","usdttrc","usdtsol","usdc","usdcsol","usdcbase","xpay","venmo"];
 
 function enabledIds(){
   var t = loadLS("elyria_pay_enabled", null);
@@ -191,7 +194,9 @@ function timelineHTML(o){
   ".ep-warn-body{font-size:12.5px;color:#f4efe6;line-height:1.65;margin:0 0 13px;font-weight:500}",
   ".ep-warn-ck{display:flex;align-items:flex-start;gap:10px;cursor:pointer;user-select:none}",
   ".ep-warn-ck input[type=checkbox]{width:17px;height:17px;margin:1px 0 0;accent-color:#e7c06a;cursor:pointer;flex:none}",
-  ".ep-warn-ck span{font-size:12.5px;color:#b5ad9d;line-height:1.5}"
+  ".ep-warn-ck span{font-size:12.5px;color:#b5ad9d;line-height:1.5}",
+  /* QR code image */
+  ".ep-qr-img{width:88px;height:88px;flex:none;border-radius:10px;object-fit:contain;background:#fff;padding:4px}"
   ].join("");
   document.head.appendChild(s);
 })();
@@ -246,21 +251,22 @@ function openPayModal(orderOrId, opts){
       +'<div class="ep-body">'
         +'<div class="ep-amt"><div class="usd">'+fmtUSD(o.total)+'</div>'
         +(alt?'<div class="alt">\u2248 '+alt+'</div>':'')
-        +'<div class="cap">'+(m.id==="venmo"?"Send via Venmo with the order ID in the note":"Send the exact amount \u2014 we match it to your order")+'</div></div>'
+        +'<div class="cap">'+(m.id==="venmo"?"Send via Venmo with the order ID in the note":m.id==="xpay"?"Scan the QR or search @TheCryptoDaddi in X Payments \u00b7 include your order ID":"Send the exact amount \u2014 we match it to your order")+'</div></div>'
         +'<div class="ep-tabs">'+tabs+'</div>'
         +'<div class="ep-addr">'
-          +'<div class="ep-qr">QR<br>placeholder</div>'
+          +(m.qr?'<img src="'+m.qr+'" class="ep-qr-img" alt="X Payments QR code">':
+            '<div class="ep-qr">QR<br>placeholder</div>')
           +'<div class="ep-addr-in"><div class="ep-net">'+m.net+'</div><div class="ep-a">'+esc(m.addr)+'</div>'
-          +'<button type="button" class="ep-copy" id="epCopy"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copy '+(m.id==="venmo"?"handle":"address")+'</button></div>'
+          +'<button type="button" class="ep-copy" id="epCopy"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copy '+(m.id==="venmo"||m.id==="xpay"?"handle":"address")+'</button></div>'
         +'</div>'
         +(m.live?'':
           '<p class="ep-sample">Sample '+(m.id==="venmo"?"handle":"address")+' \u2014 replace with your live receiving details before enabling this method.</p>')
         +'<div class="ep-steps">'
-          +'<div class="ep-step"><b>1</b><span>Send <b style="color:#f4efe6">'+(alt||fmtUSD(o.total))+'</b>'+(m.id==="venmo"?' to '+esc(m.addr)+' with note <b style="color:#f4efe6">'+esc(o.id)+'</b>':' to the address above')+'</span></div>'
-          +'<div class="ep-step"><b>2</b><span>Paste the '+(m.id==="venmo"?"Venmo confirmation / last 4 of transaction":"transaction hash")+' below</span></div>'
+          +'<div class="ep-step"><b>1</b><span>Send <b style="color:#f4efe6">'+(alt||fmtUSD(o.total))+'</b>'+(m.id==="venmo"?' to '+esc(m.addr)+' with note <b style="color:#f4efe6">'+esc(o.id)+'</b>':m.id==="xpay"?' via X Payments to <b style="color:#f4efe6">'+esc(m.addr)+'</b> \u2014 include order ID <b style="color:#f4efe6">'+esc(o.id)+'</b> in the note':' to the address above')+'</span></div>'
+          +'<div class="ep-step"><b>2</b><span>Paste the '+(m.id==="venmo"||m.id==="xpay"?"payment confirmation ID":"transaction hash")+' below</span></div>'
           +'<div class="ep-step"><b>3</b><span>Attach a screenshot \u2014 optional, but speeds up verification</span></div>'
         +'</div>'
-        +(m.id!=="venmo"?
+        +(m.id!=="venmo"&&m.id!=="xpay"?
           '<div class="ep-warn" id="epWarnBox">'
             +'<div class="ep-warn-hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
             +'<strong>Please verify your currency and network</strong></div>'
@@ -270,8 +276,8 @@ function openPayModal(orderOrId, opts){
         :"")
         +'<div class="ep-sec">Proof of payment</div>'
 
-        +'<div class="ep-f"><label>'+(m.id==="venmo"?"Venmo confirmation ID or username you sent from":"Transaction hash")+'</label>'
-        +'<input id="epRef" placeholder="'+(m.id==="venmo"?"@your-handle \u00b7 May 30":"0x9f2c\u2026 or txid")+'" autocomplete="off"></div>'
+        +'<div class="ep-f"><label>'+(m.id==="venmo"?"Venmo confirmation ID or username you sent from":m.id==="xpay"?"X Payments confirmation ID or @username":"Transaction hash")+'</label>'
+        +'<input id="epRef" placeholder="'+(m.id==="venmo"?"@your-handle \u00b7 May 30":m.id==="xpay"?"X confirmation ID or @username":"0x9f2c\u2026 or txid")+'" autocomplete="off"></div>'
         +'<div class="ep-drop" id="epDrop"><input type="file" id="epFile" accept="image/*" hidden>'
           +'<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5-8 8"/></svg>'
           +'<span class="t" id="epDropT"><b>Attach payment screenshot</b>PNG or JPG \u00b7 kept with your order</span>'
@@ -297,7 +303,7 @@ function openPayModal(orderOrId, opts){
       var self=this; setTimeout(function(){ if(self.isConnected) paint(); }, 900);
     };
     var refEl = md.querySelector("#epRef"), sub = md.querySelector("#epSubmit");
-    var ckEl = m.id !== "venmo" ? md.querySelector("#epWarnCk") : null;
+    var ckEl = (m.id !== "venmo" && m.id !== "xpay") ? md.querySelector("#epWarnCk") : null;
     function gate(){
       var ckOk = !ckEl || ckEl.checked;
       sub.disabled = !((refEl.value.trim().length>=4 || proofImg) && ckOk);
