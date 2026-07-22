@@ -272,7 +272,7 @@
         }
 
         var ts = date.getTime() + Math.floor(r() * 86400000);
-        var lot = "26-" + pick(r, ["A", "A", "B", "B", "B", "C"]);
+        var lot = "";
         var carrier = pick(r, ["UPS", "UPS", "FedEx", "USPS"]);
         var ordObj = {
           id: "EB-" + seq, ts: ts, cust: cust.id, custName: cust.name, email: cust.email,
@@ -295,9 +295,9 @@
     // lots / COA register (aggregated from catalog + lot codes)
     var lots = [];
     var lotDefs = [
-      { lot: "26-A", released: "2026-01-08", purityFloor: "99.0%" },
+      { lot: "", released: "2026-01-08", purityFloor: "99.0%" },
       { lot: "", released: "2026-03-02", purityFloor: "99.0%" },
-      { lot: "26-C", released: "2026-04-19", purityFloor: "99.0%" }
+      { lot: "", released: "2026-04-19", purityFloor: "99.0%" }
     ];
     PRODUCTS.forEach(function (p, idx) {
       var ld = lotDefs[idx % lotDefs.length];

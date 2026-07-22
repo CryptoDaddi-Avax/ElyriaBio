@@ -69,17 +69,8 @@ var CAT = {
   tirz:{name:"GLP-2",size:"10 mg",price:179,purity:"99.3%"}
 };
 
-/* ---------- orders: freshly placed (localStorage) + demo history ---------- */
-var ORDERS = [
-  { id:"LMB-26B-1042", date:"May 28, 2026", status:"transit",
-    items:[{id:"tirz",qty:1,lot:"LMB-26B-512"},{id:"bacwater",qty:2,lot:"LMB-26B-118"}] },
-  { id:"LMB-26B-0987", date:"May 9, 2026", status:"delivered",
-    items:[{id:"bpc157",qty:2,lot:"LMB-26B-425"},{id:"tb500",qty:1,lot:"LMB-26B-551"}] },
-  { id:"LMB-26A-0815", date:"Apr 16, 2026", status:"delivered",
-    items:[{id:"ghkcu",qty:1,lot:"LMB-26A-309"},{id:"cjcipa",qty:1,lot:"LMB-26A-377"}] },
-  { id:"LMB-26A-0623", date:"Mar 23, 2026", status:"delivered",
-    items:[{id:"reta",qty:1,lot:"LMB-26A-201"},{id:"ipa",qty:1,lot:"LMB-26A-244"},{id:"epi",qty:1,lot:"LMB-26A-260"}] }
-];
+/* ---------- orders: placed via checkout (localStorage) + claimed guest orders ---------- */
+var ORDERS = [];
 /* Merge guest orders that were claimed by this user (called after auth, not at load) */
 function mergeClaimedOrders(user){
   var guests = load("elyria_orders_guest", []);
@@ -106,24 +97,12 @@ function claimOrder(orderNum, email){
 function orderTotal(o){ var t=0; o.items.forEach(function(it){ var p=CAT[it.id]; if(p) t+=p.price*it.qty; }); return t; }
 function orderUnits(o){ var n=0; o.items.forEach(function(it){ n+=it.qty; }); return n; }
 
-/* ---------- demo referred orders (affiliate) ---------- */
-var REFERRALS = [
-  { cust:"r.delgado@****", date:"May 30, 2026", value:179.00, type:"first" },
-  { cust:"halpernlab@****", date:"May 24, 2026", value:91.99, type:"first" },
-  { cust:"m.okafor@****", date:"May 19, 2026", value:63.98, type:"recurring" },
-  { cust:"vector.bio@****", date:"May 11, 2026", value:219.96, type:"first" },
-  { cust:"r.delgado@****", date:"May 2, 2026", value:55.99, type:"recurring" },
-  { cust:"s.petrova@****", date:"Apr 27, 2026", value:127.98, type:"first" },
-  { cust:"halpernlab@****", date:"Apr 14, 2026", value:47.99, type:"recurring" },
-  { cust:"j.nakamura@****", date:"Apr 6, 2026", value:103.98, type:"first" }
-];
+/* ---------- referred orders (affiliate) — loaded from backend when available ---------- */
+var REFERRALS = [];
 function commissionOf(r){ return r.value * (r.type==="first"?CONFIG.firstRate:CONFIG.recurRate); }
 function pendingEarnings(){ var t=0; REFERRALS.forEach(function(r){ t+=commissionOf(r); }); return t; }
 
-var PAYOUT_HISTORY = [
-  { date:"May 1, 2026", method:"Store credit", amount:214.40, status:"paid" },
-  { date:"Apr 1, 2026", method:"PayPal", amount:188.75, status:"paid" }
-];
+var PAYOUT_HISTORY = [];
 function lifetimePaid(){ var t=0; PAYOUT_HISTORY.forEach(function(p){ t+=p.amount; }); return t; }
 
 /* ============================================================
@@ -160,7 +139,7 @@ function paintHero(u){
   var first=(titles.indexOf((nm[0]||"").toLowerCase())>=0 && nm[1]) ? nm[1] : nm[0];
   $("greetName").textContent = first;
   var hw=$("heroWarm"); if(hw) hw.textContent = pick(WARM_LINES);
-  var credit = load("elyria_credit", 124.40);
+  var credit = load("elyria_credit", 0);
   var verified = u.verified;
   var chips = '<span class="acct-pill">Member since '+(u.joined||"2025")+'</span>'+
     (verified
@@ -174,7 +153,7 @@ function paintHero(u){
    OVERVIEW
    ============================================================ */
 function paintOverview(){
-  var credit = load("elyria_credit", 124.40);
+  var credit = load("elyria_credit", 0);
   var aff = affState();
   var affEarn = aff ? pendingEarnings() : 0;
   var stats = [
@@ -257,10 +236,7 @@ function paintDocs(){
    ADDRESSES
    ============================================================ */
 function getAddresses(){
-  return load("elyria_addresses", [
-    { id:"a1", label:"Lab — primary", name:"Receiving · Bldg 4", line:"2200 Mission Bay Blvd, Lab 4A\nSan Francisco, CA 94158", def:true },
-    { id:"a2", label:"Department office", name:"Attn: Procurement", line:"Dept. of Molecular Biology\n1 Cyclotron Rd, Berkeley, CA 94720", def:false }
-  ]);
+  return load("elyria_addresses", []);
 }
 function paintAddresses(){
   var list=getAddresses();
@@ -422,7 +398,7 @@ function wireAffPortal(aff){
   if(rp) rp.addEventListener("click", function(){
     var amt=pendingEarnings(), a=affState();
     if(a.payoutMethod==="credit" || !a.payoutMethod){
-      var c=load("elyria_credit",124.40)+amt; save("elyria_credit", c);
+      var c=load("elyria_credit",0)+amt; save("elyria_credit", c);
       toast(money(amt)+" added to store credit");
       paintHero(getUser()); paintOverview();
     } else {
@@ -439,9 +415,7 @@ function wireAffPortal(aff){
 var SUB_DISCOUNT=0.05;
 var CAD_WEEKS=[2,3,4,6,8,12];
 function cadLabel(w){ return "Every "+w+" weeks"; }
-function getSubs(){ return load("elyria_subscriptions", [
-  { id:"s1", items:[{id:"ghkcu",qty:1}], cad:6, nextTs:Date.now()+12*86400000, status:"active" }
-]); }
+function getSubs(){ return load("elyria_subscriptions", []); }
 function saveSubs(s){ save("elyria_subscriptions", s); }
 function fmtDate(ts){ return new Date(ts).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); }
 function isoDate(ts){ var d=new Date(ts); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }

@@ -187,7 +187,7 @@ if(blForm){
     } else {
       res.hidden=false;
       res.className="batch-result err";
-      res.innerHTML = '<div class="br-head err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg><span>No record for \u201c'+rawSafe+'\u201d</span></div><p>Check the lot code on your vial or COA. Example format: <b>LMB-26B-425</b>. For help, contact QC support.</p>';
+      res.innerHTML = '<div class="br-head err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg><span>No record for \u201c'+rawSafe+'\u201d</span></div><p>Check the lot code on your vial or COA. Example format: <b>On file</b>. For help, contact QC support.</p>';
     }
   });
 }

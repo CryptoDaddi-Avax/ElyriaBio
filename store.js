@@ -813,8 +813,8 @@ function shipToFormHTML(pre){
   return '<div class="co-grid">'+
     '<div class="co-f full"><label>Email</label><input id="coEmail" type="email" placeholder="you@example.com" required'+v(pre.email)+'></div>'+
     '<div class="co-f full"><label>Ship to</label><input id="coName" placeholder="Full name" required'+v(pre.name)+'></div>'+
-    '<div class="co-f full"><label>Street address</label><input id="coStreet" placeholder="2200 Mission Bay Blvd, Apt 4" required'+v(pre.street)+'></div>'+
-    '<div class="co-f full"><label>City, State ZIP</label><input id="coCsz" placeholder="San Francisco, CA 94158" required'+v(pre.csz)+'></div>'+
+    '<div class="co-f full"><label>Street address</label><input id="coStreet" placeholder="123 Research Dr, Suite 100" required'+v(pre.street)+'></div>'+
+    '<div class="co-f full"><label>City, State ZIP</label><input id="coCsz" placeholder="City, State ZIP" required'+v(pre.csz)+'></div>'+
   '</div>';
 }
 function shipToSavedHTML(s){
@@ -833,7 +833,7 @@ function payOptionsHTML(){
   }).join("");
 }
 function orderSeq(){ var n=load("elyria_order_seq", 1041)+1; save("elyria_order_seq", n); return n; }
-function itemLot(id){ var kp=keyProduct(id); return kp?lotInfo(kp.p).lot:"LMB-26B-000"; }
+function itemLot(id){ var kp=keyProduct(id); return kp?lotInfo(kp.p).lot:""; }
 function openCheckout(){
   var t = computeTotals();
   if(t.count===0) return;
