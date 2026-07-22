@@ -455,11 +455,7 @@ function buildCard(p){
       '</div>'+
     '</div>'+
     '<div class="card-actions">'+
-      '<div class="pack-sel" data-packsel="'+p.id+'">'+
-        '<button type="button" class="pack-btn on" data-packqty="1" data-id="'+p.id+'">1 vial</button>'+
-        '<button type="button" class="pack-btn" data-packqty="3" data-id="'+p.id+'">3-pack<span class="pack-disc">−15%</span></button>'+
-        '<button type="button" class="pack-btn" data-packqty="5" data-id="'+p.id+'">5-pack<span class="pack-disc">−25%</span></button>'+
-      '</div>'+
+      '<p class="card-vol-hint">Click product card to view Volume discounts</p>'+
       '<button class="add-btn" data-add="'+p.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 5v14M5 12h14"/></svg>Add to cart</button>'+
     '</div>';
   return card;
