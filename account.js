@@ -15,7 +15,7 @@ function money(n){ return "$"+Number(n).toFixed(2); }
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
 
 /* ---------- program config (commission economics) ---------- */
-var CONFIG = { firstRate:0.20, recurRate:0.10, refDiscount:0.10, cookieDays:60, minPayout:50 };
+var CONFIG = { firstRate:0.10, recurRate:0.10, refDiscount:0.10, cookieDays:60, minPayout:50 };
 
 /* ---------- warm, randomized member + affiliate messages ---------- */
 var AFFILIATE_CHEERS = [
@@ -713,11 +713,6 @@ function wireAuth(){
     var name=(mode==="signup"?($("authName").value||"").trim():"") || nameFromEmail(email);
     var org=(mode==="signup"?($("authOrg").value||"").trim():"") || "Independent researcher";
     setUser({ email:email||"researcher@lab.org", name:name, org:org, role:"Principal investigator", verified:mode!=="signup", joined:new Date().getFullYear() });
-    showDash();
-  });
-  var demo=$("demoLogin");
-  if(demo) demo.addEventListener("click", function(){
-    setUser({ email:"dr.s.chen@helixlab.org", name:"Dr. Sarah Chen", org:"Helix Molecular Lab", role:"Principal investigator", verified:true, joined:"2025" });
     showDash();
   });
 }
