@@ -32,7 +32,7 @@
   var mgPerVial = parseFloat(pdpSize) || 0;
 
   function fmt(n){ return "$"+n.toFixed(2); }
-  function rate(q){ return q>=5 ? 0.15 : (q>=3 ? 0.08 : 0); }
+  function rate(q){ return q>=5 ? 0.25 : (q>=3 ? 0.15 : 0); }
 
   /* ---------- bulk-pricing buy box ---------- */
   var tiers = Array.prototype.slice.call(scope.querySelectorAll(".tier"));

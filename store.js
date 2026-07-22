@@ -457,8 +457,8 @@ function buildCard(p){
     '<div class="card-actions">'+
       '<div class="pack-sel" data-packsel="'+p.id+'">'+
         '<button type="button" class="pack-btn on" data-packqty="1" data-id="'+p.id+'">1 vial</button>'+
-        '<button type="button" class="pack-btn" data-packqty="3" data-id="'+p.id+'">3-pack<span class="pack-disc">−8%</span></button>'+
-        '<button type="button" class="pack-btn" data-packqty="5" data-id="'+p.id+'">5-pack<span class="pack-disc">−15%</span></button>'+
+        '<button type="button" class="pack-btn" data-packqty="3" data-id="'+p.id+'">3-pack<span class="pack-disc">−15%</span></button>'+
+        '<button type="button" class="pack-btn" data-packqty="5" data-id="'+p.id+'">5-pack<span class="pack-disc">−25%</span></button>'+
       '</div>'+
       '<button class="add-btn" data-add="'+p.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 5v14M5 12h14"/></svg>Add to cart</button>'+
     '</div>';
@@ -588,8 +588,8 @@ var sumShipping = document.getElementById("sumShipping");
 var sumTotal = document.getElementById("sumTotal");
 
 /* Multi-vial volume pricing — applied automatically per line item.
-   Buy 3+ of a material → 8% off that line; 5+ → 15% off. Scales site-wide. */
-function volumeRate(q){ return q>=5 ? 0.15 : (q>=3 ? 0.08 : 0); }
+   Buy 3+ of a material → 15% off that line; 5+ → 25% off. Scales site-wide. */
+function volumeRate(q){ return q>=5 ? 0.25 : (q>=3 ? 0.15 : 0); }
 function computeTotals(){
   var ids = Object.keys(cart), count=0, subtotal=0, volume=0;
   ids.forEach(function(key){ var kp=keyProduct(key); if(!kp)return; var q=cart[key]; count+=q; var line=kp.price*q; subtotal+=line; volume+=line*volumeRate(q); });
