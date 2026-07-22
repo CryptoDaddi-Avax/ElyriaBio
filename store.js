@@ -363,7 +363,7 @@ save("elyria_cart", cart); save("elyria_favs", favs); save("elyria_recent", rece
 var cardQty = {}, cardSize = {};
 PRODUCTS.forEach(function(p){ cardQty[p.id]=1; cardSize[p.id]=mgOf(p); });
 
-var FREE_SHIP = 150, SHIP_COST = 12;
+var FREE_SHIP = 150, FREE_EXPRESS = 250, SHIP_COST = 10.99, EXPRESS_COST = 24.99;
 var CODES = { "ELYRIA10":{type:"pct",val:.10,label:"ELYRIA10 · 10% off"},
               "WELCOME15":{type:"pct",val:.15,label:"WELCOME15 · 15% off"},
               "FREESHIP":{type:"ship",val:0,label:"FREESHIP · free shipping"} };
@@ -844,8 +844,12 @@ function openCheckout(){
     coBackdrop.addEventListener("click", closeCheckout);
     document.addEventListener("keydown", function(e){ if(e.key==="Escape" && coModal.classList.contains("open")) closeCheckout(); });
   }
-  var coldCost = (t.subtotal - t.discount) >= FREE_SHIP ? 0 : 18;
-  var stdCost = t.shipping;
+  var afterDisc2 = t.subtotal - t.discount;
+  var stdCost  = afterDisc2 >= FREE_SHIP    ? 0 : SHIP_COST;
+  var exprCost = afterDisc2 >= FREE_EXPRESS ? 0 : EXPRESS_COST;
+  /* auto-select express if it's free (order >= $250), else default standard */
+  if(afterDisc2 >= FREE_EXPRESS) checkoutShip = "express";
+  else checkoutShip = "standard";
   var itemsHTML = t.ids.map(function(key){ var kp=keyProduct(key); return '<div class="co-item"><span>'+kp.p.name+' <span class="ci-q">'+kp.size+' · '+cart[key]+'×</span></span><span class="ci-p">'+fmt(kp.price*cart[key])+'</span></div>'; }).join("");
   var saved = savedShipTo();
   coUseSaved = !!saved;
@@ -858,8 +862,8 @@ function openCheckout(){
       '<div id="coShipTo">'+(coUseSaved ? shipToSavedHTML(saved) : shipToFormHTML())+'</div>'+
       '<div class="co-sec">Shipping method</div>'+
       '<div class="co-ship" id="coShip">'+
-        '<div class="co-opt on" data-ship="standard"><span class="dot"></span><span class="ot"><b>Standard — ambient</b><span>Insulated mailer · 2–4 business days</span></span><span class="op">'+(stdCost===0?'Free':fmt(stdCost))+'</span></div>'+
-        '<div class="co-opt" data-ship="cold"><span class="dot"></span><span class="ot"><b>Cold-chain — gel pack</b><span>Temperature-controlled · 1–2 business days</span></span><span class="op">'+(coldCost===0?'Free':fmt(coldCost))+'</span></div>'+
+        '<div class="co-opt'+(checkoutShip==="standard"?' on':'')+'" data-ship="standard"><span class="dot"></span><span class="ot"><b>Standard Shipping</b><span>3–5 business days</span></span><span class="op">'+(stdCost===0?'Free':fmt(stdCost))+'</span></div>'+
+        '<div class="co-opt'+(checkoutShip==="express"?' on':'')+'" data-ship="express"><span class="dot"></span><span class="ot"><b>Express Shipping</b><span>1–2 business days</span></span><span class="op">'+(exprCost===0?'Free':fmt(exprCost))+'</span></div>'+
       '</div>'+
       (window.ElyriaPay?
       '<div class="co-sec">Payment</div>'+
@@ -869,7 +873,7 @@ function openCheckout(){
       '<div class="co-items">'+itemsHTML+'</div>'+
     '</div>'+
     '<div class="co-foot" id="coFoot"></div>';
-  checkoutShip="standard";
+  /* checkoutShip already set above based on threshold */
   coModal.querySelector("#coClose").addEventListener("click", closeCheckout);
   coModal.querySelector("#coShip").addEventListener("click", function(e){
     var opt=e.target.closest("[data-ship]"); if(!opt) return;
@@ -903,8 +907,9 @@ function openCheckout(){
   requestAnimationFrame(function(){ coBackdrop.classList.add("open"); coModal.classList.add("open"); document.body.classList.add("lock"); });
 }
 function checkoutShipCost(t){
-  if(checkoutShip==="cold") return (t.subtotal - t.discount) >= FREE_SHIP ? 0 : 18;
-  return t.shipping;
+  var after = t.subtotal - t.discount;
+  if(checkoutShip==="express") return after >= FREE_EXPRESS ? 0 : EXPRESS_COST;
+  return after >= FREE_SHIP ? 0 : SHIP_COST;
 }
 function paintCheckoutFoot(){
   var t=computeTotals(); var ship=checkoutShipCost(t);
@@ -921,7 +926,7 @@ function paintCheckoutFoot(){
   foot.innerHTML =
     '<div class="co-tot"><span>Subtotal</span><span>'+fmt(t.subtotal)+'</span></div>'+
     (t.discount>0?'<div class="co-tot"><span>Discount'+(appliedCode?' · '+escapeHtml(appliedCode):'')+'</span><span>−'+fmt(t.discount)+'</span></div>':'')+
-    '<div class="co-tot"><span>Shipping · '+(checkoutShip==="cold"?"cold-chain":"standard")+'</span><span>'+(ship===0?'Free':fmt(ship))+'</span></div>'+
+    '<div class="co-tot"><span>Shipping · '+(checkoutShip==="express"?"express":"standard")+'</span><span>'+(ship===0?'Free':fmt(ship))+'</span></div>'+
     '<div class="co-tot grand"><span>Total</span><b>'+fmt(grand)+'</b></div>'+
     '<button class="co-place" id="coPlace"'+(valid?'':' disabled')+'>Place order · '+fmt(grand)+'</button>'+
     '<p class="co-ruo">By placing this order you confirm these materials are for in-vitro research use only.</p>';
