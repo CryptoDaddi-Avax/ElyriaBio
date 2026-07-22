@@ -91,6 +91,9 @@ var PRODUCTS = [
   {id:"bacwater", name:"Bacteriostatic Water", cat:"supplies", cas:"Sterile water for injection", size:"30 mL", price:16.99, compareAt:0, purity:"USP", rating:4.9, reviews:418, badge:"bestseller", stock:"in", endo:"< 0.25 EU/mL", identity:"USP grade", supply:true, photo:"assets/products/bacteriostatic-water.jpg",
    desc:"Multi-dose sterile diluent — water for injection with 0.9% benzyl alcohol — for reconstituting lyophilized research peptides."}
 ];
+var LOT_OVERRIDES = {
+  bacwater: { lot:"EB61901", assay:"May 14, 2026", exp:"May 14, 2028" }
+};
 function product(id){ for(var i=0;i<PRODUCTS.length;i++){ if(PRODUCTS[i].id===id) return PRODUCTS[i]; } return null; }
 var SLUGS={bpc157:"bpc-157",tb500:"tb-500",ghkcu:"ghk-cu",tirz:"glp-2",reta:"glp-3",ipa:"ipamorelin",cjcipa:"cjc-1295-ipamorelin",epi:"epithalon",tesa:"tesamorelin",semax:"semax",selank:"selank",mt2:"melanotan-2",dsip:"dsip",kiss:"kisspeptin",kpv:"kpv",motsc:"mots-c",nad:"nad-plus",gluta:"glutathione",mt1:"melanotan-1",pt141:"pt-141",aod:"aod-9604",cagri:"cagrilintide",igf1lr3:"igf-1-lr3",amino1mq:"5-amino-1mq",ta1:"thymosin-alpha-1",snap8:"snap-8",glow:"glow",klow:"klow",wolverine:"bpc-157-tb-500",bacwater:"bacteriostatic-water"};
 function purl(id){ return "products/"+(SLUGS[id]||id)+".html"; }
@@ -1530,9 +1533,6 @@ try{ window.parent.postMessage({type:"__edit_mode_available"},"*"); }catch(e){}
 function escapeHtml(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
 function hashStr(s){ var h=0; for(var i=0;i<s.length;i++){ h=(h<<5)-h+s.charCodeAt(i); h|=0; } return Math.abs(h); }
-var LOT_OVERRIDES = {
-  bacwater: { lot:"EB61901", assay:"May 14, 2026", exp:"May 14, 2028" }
-};
 function lotInfo(p){
   if(LOT_OVERRIDES[p.id]) return LOT_OVERRIDES[p.id];
   var h=hashStr(p.id+p.name);
