@@ -470,6 +470,9 @@ function buildCard(p){
 var _sorted = PRODUCTS.slice().sort(function(a,b){ return (COMING_SOON[a.id]?1:0)-(COMING_SOON[b.id]?1:0); });
 _sorted.forEach(function(p){ grid.appendChild(buildCard(p)); });
 var cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
+/* Force .in on all cards immediately so opacity:0 (.rv) doesn't hide them
+   before the IntersectionObserver has a chance to fire */
+cards.forEach(function(c){ c.classList.add("in"); });
 var ORIGINAL_ORDER = cards.slice();
 
 /* ---- vitrine tilt + follow-glow ---- */
@@ -1166,8 +1169,13 @@ function applyView(){
   withFlip(function(){
     cards.forEach(function(card){
       var p = product(card.getAttribute("data-id"));
-      if(matches(p)){ card.classList.remove("hidden"); n++; }
-      else card.classList.add("hidden");
+      if(matches(p)){
+        card.classList.remove("hidden");
+        card.classList.add("in");  /* ensure card is visible — .rv starts at opacity:0 */
+        n++;
+      } else {
+        card.classList.add("hidden");
+      }
     });
   });
   resultCount.innerHTML = "<b>"+n+"</b> "+(n===1?"product":"products");
