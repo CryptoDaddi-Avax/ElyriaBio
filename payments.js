@@ -167,7 +167,16 @@ function timelineHTML(o){
   ".ostatus.pending,.ostatus.awaiting{color:#e0a17c;background:rgba(224,161,124,.1)} .ostatus.pending .d,.ostatus.awaiting .d{background:#e0a17c;box-shadow:0 0 7px #e0a17c}",
   ".ostatus.submitted{color:#e7c98a;background:rgba(231,184,106,.1)} .ostatus.submitted .d{background:#e7b86a;box-shadow:0 0 7px #e7b86a}",
   ".ostatus.confirmed{color:#9fb6d8;background:rgba(159,182,216,.1)} .ostatus.confirmed .d{background:#8fa8d8;box-shadow:0 0 7px #8fa8d8}",
-  ".ostatus.shipped{color:#e7c98a;background:rgba(231,184,106,.1)} .ostatus.shipped .d{background:#e7b86a;box-shadow:0 0 7px #e7b86a}"
+  ".ostatus.shipped{color:#e7c98a;background:rgba(231,184,106,.1)} .ostatus.shipped .d{background:#e7b86a;box-shadow:0 0 7px #e7b86a}",
+  /* network warning */
+  ".ep-warn{border:1px solid rgba(231,70,50,.5);background:rgba(200,40,20,.06);border-radius:12px;padding:14px 16px;margin-bottom:18px}",
+  ".ep-warn-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}",
+  ".ep-warn-hd svg{width:18px;height:18px;flex:none;color:#f07060}",
+  ".ep-warn-hd strong{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#f07060;font-weight:700;line-height:1.4}",
+  ".ep-warn-body{font-size:12.5px;color:#f4efe6;line-height:1.65;margin:0 0 13px;font-weight:500}",
+  ".ep-warn-ck{display:flex;align-items:flex-start;gap:10px;cursor:pointer;user-select:none}",
+  ".ep-warn-ck input[type=checkbox]{width:17px;height:17px;margin:1px 0 0;accent-color:#e7c06a;cursor:pointer;flex:none}",
+  ".ep-warn-ck span{font-size:12.5px;color:#b5ad9d;line-height:1.5}"
   ].join("");
   document.head.appendChild(s);
 })();
@@ -236,7 +245,16 @@ function openPayModal(orderOrId, opts){
           +'<div class="ep-step"><b>2</b><span>Paste the '+(m.id==="venmo"?"Venmo confirmation / last 4 of transaction":"transaction hash")+' below</span></div>'
           +'<div class="ep-step"><b>3</b><span>Attach a screenshot \u2014 optional, but speeds up verification</span></div>'
         +'</div>'
+        +(m.id!=="venmo"?
+          '<div class="ep-warn" id="epWarnBox">'
+            +'<div class="ep-warn-hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+            +'<strong>Please verify your currency and network</strong></div>'
+            +'<p class="ep-warn-body">IF FUNDS ARE SENT VIA THE WRONG NETWORK THEY WILL LIKELY BE UNRETRIEVABLE.</p>'
+            +'<label class="ep-warn-ck"><input type="checkbox" id="epWarnCk"><span>I have verified the correct currency and network before sending.</span></label>'
+          +'</div>'
+        :"")
         +'<div class="ep-sec">Proof of payment</div>'
+
         +'<div class="ep-f"><label>'+(m.id==="venmo"?"Venmo confirmation ID or username you sent from":"Transaction hash")+'</label>'
         +'<input id="epRef" placeholder="'+(m.id==="venmo"?"@your-handle \u00b7 May 30":"0x9f2c\u2026 or txid")+'" autocomplete="off"></div>'
         +'<div class="ep-drop" id="epDrop"><input type="file" id="epFile" accept="image/*" hidden>'
@@ -264,8 +282,13 @@ function openPayModal(orderOrId, opts){
       var self=this; setTimeout(function(){ if(self.isConnected) paint(); }, 900);
     };
     var refEl = md.querySelector("#epRef"), sub = md.querySelector("#epSubmit");
-    function gate(){ sub.disabled = !(refEl.value.trim().length>=4 || proofImg); }
+    var ckEl = m.id !== "venmo" ? md.querySelector("#epWarnCk") : null;
+    function gate(){
+      var ckOk = !ckEl || ckEl.checked;
+      sub.disabled = !((refEl.value.trim().length>=4 || proofImg) && ckOk);
+    }
     refEl.addEventListener("input", gate);
+    if(ckEl) ckEl.addEventListener("change", gate);
     var drop = md.querySelector("#epDrop"), fileIn = md.querySelector("#epFile");
     drop.onclick = function(){ fileIn.click(); };
     fileIn.onchange = function(){
