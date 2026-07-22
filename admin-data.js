@@ -296,7 +296,7 @@
     var lots = [];
     var lotDefs = [
       { lot: "26-A", released: "2026-01-08", purityFloor: "99.0%" },
-      { lot: "26-B", released: "2026-03-02", purityFloor: "99.0%" },
+      { lot: "", released: "2026-03-02", purityFloor: "99.0%" },
       { lot: "26-C", released: "2026-04-19", purityFloor: "99.0%" }
     ];
     PRODUCTS.forEach(function (p, idx) {

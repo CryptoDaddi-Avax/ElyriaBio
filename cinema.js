@@ -140,7 +140,7 @@ function updateUI(sp, u){
   var label, seq, vtext, ok=false;
   if(sp < 0.34){
     label='Elyria Bio · Testing'; seq='HPLC · LC-MS identity assay';
-    vtext = sp<0.18 ? 'Loading sample · lot 26-B' : (sp<0.27 ? 'Acquiring chromatogram…' : 'Integrating peaks…');
+    vtext = sp<0.18 ? 'Loading sample · lot on file' : (sp<0.27 ? 'Acquiring chromatogram…' : 'Integrating peaks…');
     if(labRead) labRead.textContent = sp<0.18 ? 'Loading sample…' : (sp<0.27 ? 'Acquiring chromatogram…' : 'Integrating peaks · 99.5%');
     if(sp<0.18) caption('Stage 01 · Product testing', 'Step into the Elyria Bio standard', false);
     else if(sp<0.27) caption('Stage 01 · Product testing', 'Every batch tested for purity, potency &amp; consistency', false);

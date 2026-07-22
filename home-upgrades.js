@@ -19,7 +19,7 @@
     var lines = boot.querySelector(".bs-lines");
     var SEQ = [
       "ELYRIA BIO — QC TERMINAL",
-      "LOT <b>26-B</b> · RP-HPLC 214nm ........ <b>99.4%</b>",
+      "LOT <b>CURRENT</b> · RP-HPLC 214nm ........ <b>99.4%</b>",
       "ESI-MS IDENTITY .................. <b>CONFIRMED</b>",
       "ENDOTOXIN LAL .................... <b>&lt; 0.5 EU/mg</b>",
       "RELEASE ................................ <b>OK</b>"
@@ -63,7 +63,7 @@
     '<div class="pv-scan"></div>'+
     '<div class="vial-real"><div class="vr-cap"></div><div class="vr-neck"></div>'+
     '<div class="vr-body"><div class="vr-gloss"></div><div class="vr-powder"></div>'+
-    '<div class="vr-label"><span class="ln">BPC-157</span><span class="ls">LOT 26-B · RUO</span><span class="laccent"></span></div>'+
+    '<div class="vr-label"><span class="ln">BPC-157</span><span class="ls">CURRENT LOT · RUO</span><span class="laccent"></span></div>'+
     '</div></div>';
   document.body.appendChild(pvial);
   var heroEl = document.getElementById("heroScroll");

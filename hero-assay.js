@@ -47,7 +47,7 @@ function resize(){
 }
 
 /* ---------- the molecule: two intertwined Cα strands ---------- */
-var N = 26;                 // residues per strand → lot 26-B
+var N = 26;                 
 var Rh = 1.16;              // helix radius (model units)
 var TURNS = 2.55;           // full turns across the strand
 var HH = 1.92;              // half-height (model units)

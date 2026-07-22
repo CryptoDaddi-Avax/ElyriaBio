@@ -40,7 +40,7 @@
     wrap.className = "chromo";
     wrap.innerHTML =
       '<div class="chromo-head"><span class="chromo-title">RP-HPLC · UV 214 nm</span>'+
-      '<span class="chromo-lot">LOT 26-B · '+purityText+' main peak</span></div>'+
+      '<span class="chromo-lot">'+purityText+' main peak</span></div>'+
       '<canvas></canvas><div class="chromo-apex">'+purityText+'<small>MAIN PEAK</small></div>';
     stagePane.appendChild(wrap);
     var cv = wrap.querySelector("canvas"), apex = wrap.querySelector(".chromo-apex");
