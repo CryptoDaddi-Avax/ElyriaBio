@@ -88,7 +88,7 @@ var PRODUCTS = [
    desc:"Four-peptide cellular blend (GHK-Cu, TB-500, BPC-157, KPV) for combined in-vitro repair research."},
   {id:"wolverine", name:"BPC-157 / TB-500 Blend", cat:"repair", cas:"Blend · BPC-157 / TB-500", size:"20 mg", price:79.99, compareAt:0, purity:"99.3%", rating:4.8, reviews:96, badge:"bestseller", stock:"in", endo:"< 0.5 EU/mg", identity:"Confirmed (MS)", photo:"assets/products/bpc-157-tb-500.jpg",
    desc:"Recovery blend pairing BPC-157 and TB-500 for combined in-vitro cell-migration research."},
-  {id:"bacwater", name:"Bacteriostatic Water", cat:"supplies", cas:"Sterile water for injection", size:"30 mL", price:13.59, compareAt:0, purity:"USP", rating:4.9, reviews:418, badge:"bestseller", stock:"in", endo:"< 0.25 EU/mL", identity:"USP grade", supply:true, photo:"assets/products/bacteriostatic-water.jpg",
+  {id:"bacwater", name:"Bacteriostatic Water", cat:"supplies", cas:"Sterile water for injection", size:"30 mL", price:16.99, compareAt:0, purity:"USP", rating:4.9, reviews:418, badge:"bestseller", stock:"in", endo:"< 0.25 EU/mL", identity:"USP grade", supply:true, photo:"assets/products/bacteriostatic-water.jpg",
    desc:"Multi-dose sterile diluent — water for injection with 0.9% benzyl alcohol — for reconstituting lyophilized research peptides."}
 ];
 function product(id){ for(var i=0;i<PRODUCTS.length;i++){ if(PRODUCTS[i].id===id) return PRODUCTS[i]; } return null; }
