@@ -80,17 +80,29 @@ var ORDERS = [
   { id:"LMB-26A-0623", date:"Mar 23, 2026", status:"delivered",
     items:[{id:"reta",qty:1,lot:"LMB-26A-201"},{id:"ipa",qty:1,lot:"LMB-26A-244"},{id:"epi",qty:1,lot:"LMB-26A-260"}] }
 ];
-/* prepend any orders the visitor placed through checkout (store.js writes elyria_orders) */
-(function mergePlacedOrders(){
-  var placed = load("elyria_orders", []);
-  if(!Array.isArray(placed) || !placed.length) return;
-  var clean = placed.map(function(o){
-    return { id:o.id, date:o.date, status:o.status||"processing",
-      pay:o.pay, payState:o.payState, total:o.total,
-      items:(o.items||[]).filter(function(it){ return CAT[it.id]; }) };
-  }).filter(function(o){ return o.items.length; });
-  ORDERS = clean.concat(ORDERS);
-})();
+/* Merge guest orders that were claimed by this user (called after auth, not at load) */
+function mergeClaimedOrders(user){
+  var guests = load("elyria_orders_guest", []);
+  if(!Array.isArray(guests)||!guests.length) return;
+  var email=(user.email||"").toLowerCase();
+  var claimed=guests.filter(function(o){ return o.claimedBy && o.claimedBy.toLowerCase()===email; })
+    .map(function(o){
+      return { id:o.id, date:o.date, status:o.status||"processing",
+        pay:o.pay, payState:o.payState, total:o.total,
+        items:(o.items||[]).filter(function(it){ return CAT[it.id]; }) };
+    }).filter(function(o){ return o.items&&o.items.length; });
+  if(claimed.length) ORDERS=claimed.concat(ORDERS);
+}
+/* Claim a guest order by order number — tags it with the user's email */
+function claimOrder(orderNum, email){
+  var num=(orderNum||"").trim().toUpperCase();
+  if(!num||!email) return false;
+  var guests=load("elyria_orders_guest",[]);
+  var found=false;
+  guests.forEach(function(o){ if(o.id.toUpperCase()===num && !o.claimedBy){ o.claimedBy=email; found=true; } });
+  if(found) save("elyria_orders_guest",guests);
+  return found;
+}
 function orderTotal(o){ var t=0; o.items.forEach(function(it){ var p=CAT[it.id]; if(p) t+=p.price*it.qty; }); return t; }
 function orderUnits(o){ var n=0; o.items.forEach(function(it){ n+=it.qty; }); return n; }
 
@@ -131,6 +143,7 @@ function makeCode(name,email){
    ============================================================ */
 function showDash(){
   var u=getUser(); if(!u){ showAuth(); return; }
+  mergeClaimedOrders(u);
   $("authView").hidden=true; $("dashView").hidden=false;
   paintHero(u); paintOverview(); paintOrders(); paintDocs(); paintAddresses(); paintProfile(u); paintAffiliate(); paintSubs();
   routeTab();
@@ -713,8 +726,24 @@ function wireAuth(){
     var name=(mode==="signup"?($("authName").value||"").trim():"") || nameFromEmail(email);
     var org=(mode==="signup"?($("authOrg").value||"").trim():"") || "Independent researcher";
     setUser({ email:email||"researcher@lab.org", name:name, org:org, role:"Principal investigator", verified:mode!=="signup", joined:new Date().getFullYear() });
+    /* claim any entered order number */
+    var onEl=$("authOrderNum");
+    if(onEl && onEl.value.trim()){
+      var wasClaimed=claimOrder(onEl.value, email||"researcher@lab.org");
+      if(wasClaimed) setTimeout(function(){ toast("Order synced \u2014 check your Orders tab."); },700);
+      else setTimeout(function(){ toast("Order number not found \u2014 check and try again."); },700);
+    }
     showDash();
   });
+  /* claim field toggle */
+  var ct=$("claimToggle"), cf=$("claimField");
+  if(ct&&cf){
+    ct.addEventListener("click",function(){
+      var shown=cf.style.display!=="none";
+      cf.style.display=shown?"none":"block";
+      ct.textContent=shown?"Have an order number? Add it to your account \u2192":"Never mind \u2014";
+    });
+  }
 }
 function nameFromEmail(e){ var p=(e||"").split("@")[0].replace(/[._]/g," "); return p.replace(/\b\w/g,function(c){return c.toUpperCase();}) || "Researcher"; }
 

@@ -959,9 +959,10 @@ function placeOrder(t, ship, grand){
     total: grand,
     items: t.ids.map(function(key){ var kp=keyProduct(key); return { id:kp.id, qty:cart[key], lot:itemLot(key), size:kp.size, price:kp.price }; })
   };
-  var orders = load("elyria_orders", []);
-  orders.unshift(order);
-  save("elyria_orders", orders);
+  order.guest = true;
+  var guestOrders = load("elyria_orders_guest", []);
+  guestOrders.unshift(order);
+  save("elyria_orders_guest", guestOrders);
   // clear cart + promo
   cart = {}; save("elyria_cart", cart);
   appliedCode = ""; save("elyria_promo", "");
