@@ -37,11 +37,14 @@ var METHODS = {
   usdc:  { id:"usdc",  name:"USDC (ERC-20)",  glyph:"$",      net:"Ethereum network only",
            addr:"0xD31bE342360A557f0C13B747f001Ba11857be4C1", rate:1, unit:"USDC",
            sub:"USD Coin \u00b7 Ethereum network only", live:true },
+  usdcsol:{ id:"usdcsol", name:"USDC (Solana)",  glyph:"$",      net:"Solana network only",
+           addr:"4eKQBoEpw8sQDF6pRgsweaHSKLG26dFPeENTXNcG5cz7", rate:1, unit:"USDC",
+           sub:"USD Coin \u00b7 Solana network only", live:true },
   venmo: { id:"venmo", name:"Venmo",    glyph:"V",      net:"Venmo",
            addr:"@ElyriaBio", rate:null, unit:null,
            sub:"Friends & family \u00b7 note = order ID" }
 };
-var ORDER = ["btc","eth","usdt","usdttrc","usdtsol","usdc","venmo"];
+var ORDER = ["btc","eth","usdt","usdttrc","usdtsol","usdc","usdcsol","venmo"];
 
 function enabledIds(){
   var t = loadLS("elyria_pay_enabled", null);
