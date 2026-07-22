@@ -65,7 +65,7 @@ var PRODUCTS = [
   {id:"kpv", name:"KPV", cat:"repair", cas:"CAS 67247-12-5", size:"10 mg", price:31.99, compareAt:0, purity:"99.4%", rating:4.7, reviews:84, badge:"", stock:"in", endo:"< 0.4 EU/mg", identity:"Confirmed (MS)", photo:"assets/products/kpv.jpg",
    desc:"Tripeptide (Lys-Pro-Val), the C-terminal α-MSH fragment, referenced in vitro in anti-inflammatory and epithelial-repair research."},
   {id:"motsc", name:"MOTS-c", cat:"metabolic", cas:"CAS 1627580-64-6", size:"20 mg", price:59.99, compareAt:0, purity:"99.2%", rating:4.6, reviews:67, badge:"new", stock:"in", endo:"< 0.5 EU/mg", identity:"Confirmed (MS)", photo:"assets/products/mots-c.jpg",
-   variants:[{mg:20,size:"20 mg",price:59.99}],
+   variants:[{mg:20,size:"20 mg",price:59.99},{mg:40,size:"40 mg",price:99.99}],
    desc:"Mitochondrial-derived peptide referenced in vitro in AMPK-signaling and metabolic-regulation research."},
   {id:"nad", name:"NAD+", cat:"longevity", cas:"CAS 53-84-9", size:"500 mg", price:55.99, compareAt:0, purity:"99.5%", rating:4.8, reviews:156, badge:"popular", stock:"in", endo:"< 0.3 EU/mg", identity:"Confirmed (MS)", photo:"assets/products/nad-plus.jpg",
    desc:"Nicotinamide adenine dinucleotide coenzyme used in vitro in cellular-energetics and sirtuin-pathway research."},
