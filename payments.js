@@ -7,8 +7,8 @@
      payState: "awaiting" | "submitted"        (until admin confirms)
      status:   "pending" -> "confirmed" -> "shipped"/"transit" -> "delivered"
      proof:    { ref, img (dataURL thumb), note, ts }
-   NOTE: wallet addresses + Venmo handle below are SAMPLE
-   placeholders — replace with live receiving details.
+   Live payment methods are marked live:true. Placeholder methods still
+   show a sample disclaimer until a real address is configured.
    ============================================================ */
 (function(){
 "use strict";
@@ -19,9 +19,9 @@ function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){retu
 
 /* ---------- methods (sample receiving details) ---------- */
 var METHODS = {
-  btc:   { id:"btc",   name:"Bitcoin",  glyph:"\u20BF", net:"Bitcoin mainnet",
-           addr:"bc1q7x2e94kmpl0sample3replace8me5w4qh6dv2a9c0z", rate:104250,   unit:"BTC",
-           sub:"On-chain \u00b7 1 confirmation" },
+  btc:   { id:"btc",   name:"Bitcoin",  glyph:"\u20BF", net:"Bitcoin network only",
+           addr:"38nWRVEAxvapAjeEK4a6pGKUs7Hby5RUPo", rate:104250,   unit:"BTC",
+           sub:"Usually 40\u201360 min to clear", live:true },
   eth:   { id:"eth",   name:"Ethereum", glyph:"\u039E", net:"Ethereum \u00b7 ERC-20",
            addr:"0x5aMP1e00000000000000000000000000rEp1acE00", rate:5480,      unit:"ETH",
            sub:"ERC-20 \u00b7 usually < 5 min" },
@@ -229,7 +229,8 @@ function openPayModal(orderOrId, opts){
           +'<div class="ep-addr-in"><div class="ep-net">'+m.net+'</div><div class="ep-a">'+esc(m.addr)+'</div>'
           +'<button type="button" class="ep-copy" id="epCopy"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copy '+(m.id==="venmo"?"handle":"address")+'</button></div>'
         +'</div>'
-        +'<p class="ep-sample">Sample '+(m.id==="venmo"?"handle":"address")+' for design review \u2014 replace with your live receiving details before launch.</p>'
+        +(m.live?'':
+          '<p class="ep-sample">Sample '+(m.id==="venmo"?"handle":"address")+' \u2014 replace with your live receiving details before enabling this method.</p>')
         +'<div class="ep-steps">'
           +'<div class="ep-step"><b>1</b><span>Send <b style="color:#f4efe6">'+(alt||fmtUSD(o.total))+'</b>'+(m.id==="venmo"?' to '+esc(m.addr)+' with note <b style="color:#f4efe6">'+esc(o.id)+'</b>':' to the address above')+'</span></div>'
           +'<div class="ep-step"><b>2</b><span>Paste the '+(m.id==="venmo"?"Venmo confirmation / last 4 of transaction":"transaction hash")+' below</span></div>'
