@@ -464,7 +464,7 @@
       + "<div class='mini-search'><svg viewBox='0 0 24 24' fill='none' stroke-width='1.7'><circle cx='11' cy='11' r='7'/><path d='M21 21l-4.3-4.3'/></svg><input id='prodSearch' placeholder='Search product…' value='" + prodFilter.q + "'></div></div>";
 
     html += "<div class='card' style='padding:0'><div class='tbl-wrap'><table><thead><tr>"
-      + "<th>Product</th><th>Category</th><th class='t-num'>Price</th><th class='t-num'>Margin</th><th class='t-num'>Sold 30d</th><th class='t-num'>Stock</th><th>Status</th><th>Purity</th>"
+      + "<th>Product</th><th>Category</th><th class='t-num'>Price</th><th class='t-num'>Margin</th><th class='t-num'>Sold 30d</th><th class='t-num'>Stock</th><th class='t-num'>3-Pack</th><th class='t-num'>5-Pack</th><th>Status</th><th>Purity</th>"
       + "</tr></thead><tbody id='prodBody'></tbody></table></div></div>";
     html += footNote();
     v.innerHTML = html;
@@ -487,6 +487,9 @@
           var crit = vstock <= Math.round(p.reorder / p.variants.length * 0.5);
           var statusPill = crit ? "<span class='pill hold'>reorder</span>" : low ? "<span class='pill verifying'>low</span>" : "<span class='pill released'>in stock</span>";
           var margin = (v.price - v.cost) / v.price * 100;
+          var pk3 = Math.floor(vstock / 3);
+          var pk5 = Math.floor(vstock / 5);
+          var packCell = "<td class='t-num t-mut' style='font-size:12px'>" + pk3 + "</td><td class='t-num t-mut' style='font-size:12px'>" + pk5 + "</td>";
           if (idx === 0) {
             // First variant row: show product name + chip
             rows += "<tr><td><div class='cell-prod'><span class='prod-chip'>" + p.name.slice(0, 2).toUpperCase() + "</span><div><div class='t-strong'>" + p.name + "</div><div class='t-mut' style='font-size:11px;font-family:IBM Plex Mono,monospace'>" + v.size + "</div></div></div></td>"
@@ -495,6 +498,7 @@
               + "<td class='t-num'>" + margin.toFixed(0) + "%</td>"
               + "<td class='t-num'>" + (sold[p.id] || 0) + "</td>"
               + "<td class='t-num'><input type='number' min='0' class='stock-edit' data-pid='" + key + "' value='" + vstock + "' style='width:64px;text-align:right;background:transparent;border:1px solid var(--line);border-radius:6px;color:" + (crit ? "var(--neg)" : low ? "var(--accent)" : "inherit") + ";font:inherit;padding:3px 6px'></td>"
+              + packCell
               + "<td>" + statusPill + "</td>"
               + "<td class='t-mut'>" + p.purity + "</td></tr>";
           } else {
@@ -505,6 +509,7 @@
               + "<td class='t-num'>" + margin.toFixed(0) + "%</td>"
               + "<td></td>"
               + "<td class='t-num'><input type='number' min='0' class='stock-edit' data-pid='" + key + "' value='" + vstock + "' style='width:64px;text-align:right;background:transparent;border:1px solid var(--line);border-radius:6px;color:" + (crit ? "var(--neg)" : low ? "var(--accent)" : "inherit") + ";font:inherit;padding:3px 6px'></td>"
+              + packCell
               + "<td>" + statusPill + "</td>"
               + "<td></td></tr>";
           }
@@ -514,12 +519,16 @@
         var margin = (p.price - p.cost) / p.price * 100;
         var low = p.stock <= p.reorder, crit = p.stock <= p.reorder * 0.5;
         var statusPill = crit ? "<span class='pill hold'>reorder</span>" : low ? "<span class='pill verifying'>low</span>" : "<span class='pill released'>in stock</span>";
+        var pk3 = Math.floor(p.stock / 3);
+        var pk5 = Math.floor(p.stock / 5);
         rows += "<tr><td><div class='cell-prod'><span class='prod-chip'>" + p.name.slice(0, 2).toUpperCase() + "</span><div><div class='t-strong'>" + p.name + "</div><div class='t-mut' style='font-size:11px;font-family:IBM Plex Mono,monospace'>" + p.size + "</div></div></div></td>"
           + "<td class='t-mut' style='text-transform:capitalize'>" + p.cat + "</td>"
           + "<td class='t-num'>" + money(p.price, 2) + "</td>"
           + "<td class='t-num'>" + margin.toFixed(0) + "%</td>"
           + "<td class='t-num'>" + (sold[p.id] || 0) + "</td>"
           + "<td class='t-num'><input type='number' min='0' class='stock-edit' data-pid='" + p.id + "' value='" + p.stock + "' style='width:64px;text-align:right;background:transparent;border:1px solid var(--line);border-radius:6px;color:" + (crit ? "var(--neg)" : low ? "var(--accent)" : "inherit") + ";font:inherit;padding:3px 6px'></td>"
+          + "<td class='t-num t-mut' style='font-size:12px'>" + pk3 + "</td>"
+          + "<td class='t-num t-mut' style='font-size:12px'>" + pk5 + "</td>"
           + "<td>" + statusPill + "</td>"
           + "<td class='t-mut'>" + p.purity + "</td></tr>";
       }
