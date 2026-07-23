@@ -91,9 +91,8 @@
       // remove fixed data-total on tiers so price recalculates from unit
       tiers.forEach(function(t){ t.removeAttribute("data-total"); });
       paintTiers();
-      // update inventory panel for this size
-      var stockKey = newMg === parseFloat(scope.getAttribute("data-size")) ? null : newSize;
-      var qty = readStock(id, stockKey);
+      // update inventory panel for this size — always use the variant key
+      var qty = readStock(id, newSize);
       var stockEl = scope.querySelector(".pdp-stock");
       if(stockEl){
         if(qty <= 0){
@@ -137,8 +136,8 @@
     var buyBox = scope.querySelector(".buy-box");
     if(!stockEl || !buyBox) return;
     var api = window.ElyriaAPI;
-    if(api && api.configured){ api.getStock(id).then(function(q){ paintStock(q==null?readStock(id):q); }); }
-    else paintStock(readStock(id));
+    if(api && api.configured){ api.getStock(id).then(function(q){ paintStock(q==null?readStock(id,size):q); }); }
+    else paintStock(readStock(id, size));
     function paintStock(qty){
     if(qty==null) return;
     if(qty<=0){
