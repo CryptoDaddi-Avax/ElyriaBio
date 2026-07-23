@@ -1452,37 +1452,39 @@ if("IntersectionObserver" in window && !reduce){
   vEls.forEach(function(v){ vio.observe(v); });
 }
 
-/* ===================== MAGNETIC CURSOR + rAF ===================== */
+/* ===================== MAGNETIC CURSOR (idle-aware) ===================== */
 var dot = document.getElementById("cursorDot");
 var ringEl = document.getElementById("cursorRing");
 var aurora = document.getElementById("aurora");
 var mouse = {x:innerWidth/2,y:innerHeight/2};
 var ringp = {x:mouse.x,y:mouse.y};
 var cursorActive = finePointer && !reduce;
-if(cursorActive){
-  document.addEventListener("mousemove", function(e){ mouse.x=e.clientX; mouse.y=e.clientY; dot.style.opacity="1"; ringEl.style.opacity="1"; });
-  document.addEventListener("mouseleave", function(){ dot.style.opacity="0"; ringEl.style.opacity="0"; });
-  document.addEventListener("mouseover", function(e){ var hot=e.target.closest(".magnetic,button,a,input,label,.card,.cat-tile,.rv-card"); dot.classList.toggle("hot",!!hot); ringEl.classList.toggle("hot",!!hot); });
-}
-var scrollY = window.pageYOffset;
-var heroVisible = true;
-var heroSection = document.getElementById("hero");
-if("IntersectionObserver" in window) new IntersectionObserver(function(es){ heroVisible=es[0].isIntersecting; },{threshold:0}).observe(heroSection);
-function loop(){
-  scrollY = window.pageYOffset;
-  if(scrollY>30) nav.classList.add("solid"); else nav.classList.remove("solid");
+var cursorDirty = false, cursorRafId = 0;
+
+function cursorTick(){
+  cursorRafId = 0;
   if(cursorActive){
     dot.style.transform = "translate("+mouse.x+"px,"+mouse.y+"px) translate(-50%,-50%)";
     ringp.x += (mouse.x-ringp.x)*0.18; ringp.y += (mouse.y-ringp.y)*0.18;
     ringEl.style.transform = "translate("+ringp.x+"px,"+ringp.y+"px) translate(-50%,-50%)";
+    /* keep ticking only while ring is still catching up */
+    var dx=mouse.x-ringp.x, dy=mouse.y-ringp.y;
+    if(dx*dx+dy*dy > 0.25){ cursorRafId = requestAnimationFrame(cursorTick); }
   }
-  if(aurora && heroVisible && !reduce){
-    var tt = performance.now()*0.0001, ax=Math.sin(tt)*40, ay=Math.cos(tt*1.3)*30;
-    aurora.style.transform = "translate3d("+ax+"px,"+(ay - scrollY*0.12)+"px,0)";
-  }
-  requestAnimationFrame(loop);
 }
-requestAnimationFrame(loop);
+function kickCursor(){ if(!cursorRafId) cursorRafId = requestAnimationFrame(cursorTick); }
+
+if(cursorActive){
+  document.addEventListener("mousemove", function(e){ mouse.x=e.clientX; mouse.y=e.clientY; dot.style.opacity="1"; ringEl.style.opacity="1"; kickCursor(); }, {passive:true});
+  document.addEventListener("mouseleave", function(){ dot.style.opacity="0"; ringEl.style.opacity="0"; });
+  document.addEventListener("mouseover", function(e){ var hot=e.target.closest(".magnetic,button,a,input,label,.card,.cat-tile,.rv-card"); dot.classList.toggle("hot",!!hot); ringEl.classList.toggle("hot",!!hot); });
+}
+
+/* nav solid state — passive scroll listener instead of rAF */
+window.addEventListener("scroll", function(){ if(window.pageYOffset>30) nav.classList.add("solid"); else nav.classList.remove("solid"); }, {passive:true});
+/* initial state */
+if(window.pageYOffset>30) nav.classList.add("solid");
+
 
 /* ===================== TWEAKS ===================== */
 var TW_DEFAULTS = { dir:"showcase", accent:"e7c06a", promoOn:true, promoText:"Free shipping over $150 · Free express over $250" };
