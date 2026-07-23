@@ -29,7 +29,7 @@
   var PRODUCTS = [
     { id: "tirz",     name: "GLP-2",                  cat: "metabolic",  size: "10 mg",  price: 179,    cost: 71,   purity: "99.3%", stock: 38,  reorder: 40 },
     { id: "reta",     name: "GLP-3",                  cat: "metabolic",  size: "10 mg",  price: 55.99,  cost: 21,   purity: "99.0%", stock: 22,  reorder: 35,
-      variants: [ { size: "10 mg", price: 55.99, cost: 21 }, { size: "15 mg", price: 69.99, cost: 28 }, { size: "30 mg", price: 109.99, cost: 52 } ] },
+      variants: [ { size: "10 mg", price: 55.99, cost: 21 }, { size: "15 mg", price: 69.99, cost: 28 }, { size: "20 mg", price: 79.99, cost: 32 }, { size: "30 mg", price: 109.99, cost: 52 } ] },
     { id: "bpc157",   name: "BPC-157",                cat: "repair",     size: "10 mg",  price: 39.99,  cost: 9.4,  purity: "99.4%", stock: 412, reorder: 120 },
     { id: "tb500",    name: "TB-500",                 cat: "repair",     size: "10 mg",  price: 44.99,  cost: 9.8,  purity: "99.2%", stock: 286, reorder: 120 },
     { id: "ghkcu",    name: "GHK-Cu",                 cat: "longevity",  size: "50 mg",  price: 29.99,  cost: 6.1,  purity: "99.6%", stock: 540, reorder: 150 },
