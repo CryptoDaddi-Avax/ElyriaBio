@@ -22,16 +22,20 @@
   function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   /* readStock supports both bare pid and pid|size keys for variants */
   function readStock(pid, sizeKey){
+    var varKey = sizeKey ? pid+'|'+sizeKey : null;
+    // A product is "multi-size" if its variant key exists in STOCK_FALLBACK
+    var isMultiSize = !!(varKey && STOCK_FALLBACK[varKey] != null);
     try{ var saved=JSON.parse(localStorage.getItem('elyria_admin_v1'));
       if(saved && saved.stockOverrides){
-        var varKey = sizeKey ? pid+'|'+sizeKey : null;
+        // 1) Exact variant key wins always
         if(varKey && saved.stockOverrides[varKey]!=null) return saved.stockOverrides[varKey];
-        if(saved.stockOverrides[pid]!=null) return saved.stockOverrides[pid];
+        // 2) Bare pid in localStorage only for single-size products
+        //    (skip for multi-size so a stale bare key can't override per-size values)
+        if(!isMultiSize && saved.stockOverrides[pid]!=null) return saved.stockOverrides[pid];
       }
     }catch(e){}
-    // fallback: check variant key first, then bare pid
-    var varKey2 = sizeKey ? pid+'|'+sizeKey : null;
-    if(varKey2 && STOCK_FALLBACK[varKey2]!=null) return STOCK_FALLBACK[varKey2];
+    // 3) STOCK_FALLBACK: variant key first, then bare pid
+    if(varKey && STOCK_FALLBACK[varKey]!=null) return STOCK_FALLBACK[varKey];
     return STOCK_FALLBACK[pid] != null ? STOCK_FALLBACK[pid] : 0;
   }
   function saveSignup(pid,name,email){
