@@ -919,9 +919,13 @@ body.intro-open{overflow:hidden}
 /* verification band now rides the same shader */
 .verify .shaderbg{position:absolute;inset:0;z-index:0;width:100%;height:100%;display:block}
 
-@media(max-width:760px){
-  .hero-scroll{height:150vh}
-  .hero-overlay-in{padding:120px 0 70px}
+@media(max-width:860px){
+  /* cinema hidden — no scroll animation; hero = one viewport */
+  .hero-scroll{height:auto}
+  .hero-stage{position:relative;height:100svh;min-height:560px}
+  /* ensure hero copy is always visible (synth-armed normally hides it for cinema) */
+  .synth-armed .hero-sub,.synth-armed .hero-cta,.synth-armed .hero-trust{opacity:1!important}
+  .hero-overlay-in{padding:120px 18px 70px}
 }
 @media (prefers-reduced-motion: reduce){
   .hero-scroll{height:auto!important}
@@ -988,7 +992,6 @@ body.tray-open .toasts{ bottom:calc(90px + env(safe-area-inset-bottom)) }
 /* phone layout polish */
 @media(max-width:680px){
   .hero-stage{ min-height:0 }
-  .hero-scroll{ height:145vh }
   .hero-overlay-in{ padding:106px 18px 64px }
   .hero-title{ letter-spacing:.07em }
   .hero-cta{ flex-direction:column; align-items:stretch; width:100%; max-width:340px; margin-left:auto; margin-right:auto }
@@ -997,9 +1000,6 @@ body.tray-open .toasts{ bottom:calc(90px + env(safe-area-inset-bottom)) }
   .account-cta{ flex-direction:column; align-items:stretch; width:100%; max-width:340px; margin:0 auto }
   .account-cta .btn{ justify-content:center; min-height:52px }
   .cat-tiles{ gap:12px }
-}
-@supports (height:100dvh){
-  @media(max-width:680px){ .hero-scroll{ height:145dvh } }
 }
 
 /* ============================================================

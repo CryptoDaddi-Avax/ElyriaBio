@@ -23,6 +23,8 @@ function lerp(a,b,t){ return a+(b-a)*t; }
 var stage  = document.getElementById('hero');
 var cinema = document.getElementById('cinema');
 if(!stage || !cinema) return;
+/* skip cinema animation on mobile — hidden by CSS and saves resources */
+if(window.innerWidth <= 860) return;
 
 /* scene refs */
 var lab     = document.getElementById('cinLab'),

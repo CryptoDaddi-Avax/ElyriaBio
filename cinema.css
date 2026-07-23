@@ -252,6 +252,12 @@
 @media (prefers-reduced-motion: reduce){
   .cin-stamp .stamp-svg,.lab-led,.lab-leds i,.truck-rolling .truck-wheel::after{animation:none}
 }
+@media(max-width:860px){
+  .cinema{display:none!important}
+  .synth-hud{display:none!important}
+  .scroll-hint{display:none!important}
+  .cin-cap{display:none!important}
+}
 @media(max-width:760px){
   .cin-lab{width:92vw} .cin-coa{width:92vw}
   .cin-cap{white-space:normal}
