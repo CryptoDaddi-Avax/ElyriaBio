@@ -459,14 +459,11 @@ function buildCard(p){
         (p.supply?'':'<button class="card-coa" data-coatoggle="'+p.id+'" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M5 3h9l5 5v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M9 13l2 2 4-4"/></svg>View certificate of analysis</button><div class="coa-inline" data-coainline="'+p.id+'" hidden></div>')+
       '</div>'+
     '</div>'+
-    '<div class="card-actions">'+
-      '<p class="card-vol-hint">Click product card to view Volume discounts</p>'+
-      '<button class="add-btn" data-add="'+p.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 5v14M5 12h14"/></svg>Add to cart</button>'+
-    '</div>';
+
   /* Make entire card clickable — navigate to product page */
   card.style.cursor = "pointer";
   card.addEventListener("click", function(e){
-    if(e.target.closest(".card-fav,.card-cmp,.qv-trigger,.card-actions,.card-coa,.coa-inline,.add-btn")) return;
+    if(e.target.closest(".card-fav,.card-cmp,.qv-trigger,.card-coa,.coa-inline")) return;
     location.href = purl(p.id);
   });
   return card;
