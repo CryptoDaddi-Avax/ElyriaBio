@@ -8,7 +8,17 @@
    ============================================================ */
 (function(){
   "use strict";
-  var STOCK_FALLBACK={tirz:38,reta:22,bpc157:412,tb500:286,ghkcu:540,ipa:318,tesa:96,cjcipa:174,epi:263,semax:198,selank:156,mt2:384,dsip:142,kiss:74,kpv:168,motsc:121,nad:132,gluta:144,mt1:210,pt141:256,aod:118,cagri:88,igf1lr3:64,amino1mq:102,klow:51,wolverine:96,snap8:84,ta1:67,glow:79};
+  var STOCK_FALLBACK={
+    // single-size products
+    tirz:0, ghkcu:0, ipa:0, cjcipa:0, epi:0, semax:0, selank:0, mt2:0,
+    dsip:0, kiss:0, kpv:0, nad:0, gluta:0, mt1:0, pt141:0, aod:0,
+    cagri:0, igf1lr3:0, amino1mq:0, wolverine:0, snap8:0, ta1:0, glow:0,
+    bpc157:27, klow:30, tb500:30, tesa:67,
+    // GLP-3 per-size fallbacks
+    reta:50, 'reta|10 mg':50, 'reta|15 mg':30, 'reta|20 mg':0, 'reta|30 mg':20,
+    // MOTS-c per-size fallbacks
+    motsc:6, 'motsc|20 mg':6, 'motsc|40 mg':19
+  };
   function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   /* readStock supports both bare pid and pid|size keys for variants */
   function readStock(pid, sizeKey){
@@ -19,7 +29,10 @@
         if(saved.stockOverrides[pid]!=null) return saved.stockOverrides[pid];
       }
     }catch(e){}
-    return STOCK_FALLBACK[pid];
+    // fallback: check variant key first, then bare pid
+    var varKey2 = sizeKey ? pid+'|'+sizeKey : null;
+    if(varKey2 && STOCK_FALLBACK[varKey2]!=null) return STOCK_FALLBACK[varKey2];
+    return STOCK_FALLBACK[pid] != null ? STOCK_FALLBACK[pid] : 0;
   }
   function saveSignup(pid,name,email){
     try{ var k="elyria_notify_signups"; var list=JSON.parse(localStorage.getItem(k))||[];
