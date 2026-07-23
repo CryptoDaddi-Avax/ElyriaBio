@@ -448,14 +448,14 @@ function buildCard(p){
         '<button class="card-cmp'+(compare.indexOf(p.id)>-1?" on":"")+'" data-cmp="'+p.id+'" aria-label="Compare '+p.name+'" title="Add to compare"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M16 3l4 4-4 4M20 7H8M8 21l-4-4 4-4M4 17h12"/></svg></button>'+
         (COMING_SOON[p.id] ? '<div class="cs-wrap">'+vialHTML(p)+'<div class="cs-overlay"><strong>Coming Soon</strong></div></div>' : vialHTML(p))+
         '<button class="qv-trigger" data-qv="'+p.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Quick view</button>'+
-      (p.supply?'':'<div class="card-analytics" title="Current lot analytics"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7z"/><path d="M9 12l2 2 4-4"/></svg><div class="ca-meta"><span class="ca-pur">'+p.purity+' HPLC</span><span class="ca-lot">Lot '+lotInfo(p).lot+' · verified</span></div></div>')+
+
     '</div>'+
     '<div class="card-body">'+
       '<div class="card-dots" aria-hidden="true" style="background-image:'+dotsBg(p)+'"></div>'+
-      '<div class="card-top"><span class="card-cat">'+p.cat+'</span><span class="card-purity">'+(p.supply?'USP grade':p.purity+' HPLC')+'</span></div>'+
+      '<div class="card-top"><span class="card-cat">'+p.cat+'</span></div>'+
       '<a class="card-name" href="'+purl(p.id)+'">'+p.name+'</a>'+
       '<div class="card-cas">'+p.cas+'</div>'+
-      '<div class="card-prov mono"><span>LOT '+lotInfo(p).lot+'</span><span class="cp-dot"></span><span>'+(p.supply?'0.9% benzyl alcohol':p.purity+' RP-HPLC')+'</span></div>'+
+
       '<p class="card-desc">'+p.desc+'</p>'+
       '<div class="card-foot">'+
         sizeSelHTML(p)+
@@ -470,7 +470,7 @@ function buildCard(p){
   /* Make entire card clickable — navigate to product page */
   card.style.cursor = "pointer";
   card.addEventListener("click", function(e){
-    if(e.target.closest(".card-fav,.card-cmp,.qv-trigger,.card-actions,.card-coa,.card-analytics,.coa-inline,.add-btn")) return;
+    if(e.target.closest(".card-fav,.card-cmp,.qv-trigger,.card-actions,.card-coa,.coa-inline,.add-btn")) return;
     location.href = purl(p.id);
   });
   return card;
@@ -1145,9 +1145,7 @@ var noResults = document.getElementById("noResults");
 var nrTerm = document.getElementById("nrTerm");
 var currentFilter = "all";
 var searchTerm = "";
-var fPurity = 0, fSizeSel = [], fStock = false, fPermg = "any", expandFromURL = false;
-function advActive(){ return fPurity>0 || fSizeSel.length>0 || fStock || fPermg!=="any"; }
-function advCount(){ return (fPurity>0?1:0)+(fSizeSel.length?1:0)+(fStock?1:0)+(fPermg!=="any"?1:0); }
+var expandFromURL = false;
 /* home page shows only the 6 most popular until “Shop all peptides” is clicked (or a filter/search is used) */
 var POPULAR = ["ghkcu","bpc157","ipa","tirz","nad","tb500"];
 var expanded = true;
@@ -1167,16 +1165,7 @@ function matches(p){
     var hay = (p.name+" "+p.cas+" "+p.cat+" "+p.desc).toLowerCase();
     if(hay.indexOf(searchTerm)===-1) return false;
   }
-  if(fPurity>0){ var pv=parseFloat(p.purity); if(!(pv>=fPurity)) return false; }
-  if(fSizeSel.length && fSizeSel.indexOf(p.size)===-1) return false;
-  if(fStock && p.stock!=="in") return false;
-  if(fPermg!=="any"){
-    var mg=parseFloat(p.size), v=(!p.supply && /mg\b/i.test(p.size) && mg>0)? p.price/mg : null;
-    if(v==null) return false;
-    if(fPermg==="lt2" && !(v<2)) return false;
-    if(fPermg==="2to5" && !(v>=2 && v<=5)) return false;
-    if(fPermg==="gt5" && !(v>5)) return false;
-  }
+
   return true;
 }
 function applyView(){
@@ -1197,7 +1186,6 @@ function applyView(){
   if(n===0){ noResults.hidden=false; nrTerm.textContent = searchTerm ? '“'+searchInput.value+'”' : "those filters"; try{ document.dispatchEvent(new CustomEvent("catalog:empty",{detail:{term:searchTerm}})); }catch(e){} }
   else { noResults.hidden=true; try{ document.dispatchEvent(new CustomEvent("catalog:filled")); }catch(e){} }
   updateScopeUI(n);
-  paintAdvControls();
   renderActiveFilters();
 }
 var activeFilters = document.getElementById("activeFilters");
@@ -1217,7 +1205,7 @@ if(activeFilters){
     var k = b.getAttribute("data-afclear");
     if(k==="cat") setFilter("all");
     else if(k==="q"){ searchInput.value=""; searchTerm=""; searchClear.hidden=true; if(searchSuggest) searchSuggest.hidden=true; applyView(); syncURL(); }
-    else { searchInput.value=""; searchTerm=""; searchClear.hidden=true; if(searchSuggest) searchSuggest.hidden=true; fPurity=0; fSizeSel=[]; fStock=false; fPermg="any"; setFilter("all"); }
+    else { searchInput.value=""; searchTerm=""; searchClear.hidden=true; if(searchSuggest) searchSuggest.hidden=true; setFilter("all"); }
   });
 }
 function setFilter(f){
@@ -1263,45 +1251,12 @@ searchInput.addEventListener("focus", function(){ renderSuggest(); });
 searchClear.addEventListener("click", function(){ searchInput.value=""; searchTerm=""; searchClear.hidden=true; searchSuggest.hidden=true; applyView(); syncURL(); searchInput.focus(); });
 document.getElementById("nrClear").addEventListener("click", function(){ searchInput.value=""; searchTerm=""; searchClear.hidden=true; searchSuggest.hidden=true; setFilter("all"); });
 
-/* ===================== ADVANCED FILTERS + SCOPE ===================== */
+/* ===================== SCOPE TOGGLE ===================== */
 var scopeToggle=document.getElementById("scopeToggle");
-var filtersToggle=document.getElementById("filtersToggle");
-var filtersCount=document.getElementById("filtersCount");
-var advFilters=document.getElementById("advFilters");
-(function buildSizeChips(){
-  var host=document.getElementById("advSizes"); if(!host) return;
-  var seen={}, order=[];
-  PRODUCTS.forEach(function(p){ if(!seen[p.size]){ seen[p.size]=1; order.push(p.size); } });
-  order.sort(function(a,b){ return (parseFloat(a)||0)-(parseFloat(b)||0); });
-  host.innerHTML=order.map(function(s){ return '<button class="fchip" data-sizeval="'+s+'">'+s+'</button>'; }).join("");
-})();
-function paintAdvControls(){
-  document.querySelectorAll("#advPurity [data-pur]").forEach(function(b){ b.classList.toggle("on", parseFloat(b.getAttribute("data-pur"))===fPurity); });
-  document.querySelectorAll("#advPermg [data-permg]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-permg")===fPermg); });
-  document.querySelectorAll("#advStock [data-stock]").forEach(function(b){ b.classList.toggle("on", (b.getAttribute("data-stock")==="in")===fStock); });
-  document.querySelectorAll("#advSizes [data-sizeval]").forEach(function(b){ b.classList.toggle("on", fSizeSel.indexOf(b.getAttribute("data-sizeval"))>-1); });
-}
 function updateScopeUI(n){
   if(scopeToggle){ scopeToggle.textContent = expanded ? "Show popular only" : ("Show all "+PRODUCTS.length); scopeToggle.classList.toggle("on", expanded); }
-  if(filtersCount){ var c=advCount(); if(c){ filtersCount.hidden=false; filtersCount.textContent=c; } else filtersCount.hidden=true; }
-  var advSummary=document.getElementById("advSummary"); if(advSummary) advSummary.innerHTML="<b>"+n+"</b> material"+(n===1?"":"s")+" match"+(n===1?"es":"");
 }
-function afterAdvChange(){ if(advActive()) setExpanded(true); applyView(); syncURL(); }
 if(scopeToggle) scopeToggle.addEventListener("click", function(){ setExpanded(!expanded); applyView(); syncURL(); });
-if(filtersToggle && advFilters){
-  filtersToggle.addEventListener("click", function(){
-    var open=advFilters.hidden; advFilters.hidden=!open;
-    filtersToggle.setAttribute("aria-expanded", open?"true":"false");
-    filtersToggle.classList.toggle("on", open);
-  });
-}
-document.querySelectorAll("#advPurity [data-pur]").forEach(function(b){ b.addEventListener("click", function(){ fPurity=parseFloat(b.getAttribute("data-pur")); afterAdvChange(); }); });
-document.querySelectorAll("#advPermg [data-permg]").forEach(function(b){ b.addEventListener("click", function(){ fPermg=b.getAttribute("data-permg"); afterAdvChange(); }); });
-document.querySelectorAll("#advStock [data-stock]").forEach(function(b){ b.addEventListener("click", function(){ fStock=(b.getAttribute("data-stock")==="in"); afterAdvChange(); }); });
-var advSizesEl=document.getElementById("advSizes");
-if(advSizesEl) advSizesEl.addEventListener("click", function(e){ var b=e.target.closest("[data-sizeval]"); if(!b) return; var s=b.getAttribute("data-sizeval"), i=fSizeSel.indexOf(s); if(i>-1) fSizeSel.splice(i,1); else fSizeSel.push(s); afterAdvChange(); });
-var advResetEl=document.getElementById("advReset");
-if(advResetEl) advResetEl.addEventListener("click", function(){ fPurity=0; fSizeSel=[]; fStock=false; fPermg="any"; afterAdvChange(); });
 
 /* ===================== PROMO BAR ===================== */
 var promobar = document.getElementById("promobar");
@@ -1651,11 +1606,7 @@ function syncURL(){
     if(currentFilter && currentFilter!=="all") params.set("cat", currentFilter);
     if(sortSelect.value && sortSelect.value!=="featured") params.set("sort", sortSelect.value);
     var q=searchInput.value.trim(); if(q) params.set("q", q);
-    if(fPurity>0) params.set("pur", fPurity);
-    if(fSizeSel.length) params.set("size", fSizeSel.join(","));
-    if(fPermg!=="any") params.set("permg", fPermg);
-    if(fStock) params.set("stock", "in");
-    if(expanded && currentFilter==="all" && !q && !advActive()) params.set("all", "1");
+    if(expanded && currentFilter==="all" && !q) params.set("all", "1");
     var qs=params.toString();
     history.replaceState(null, "", qs?("?"+qs):location.pathname);
   }catch(e){}
@@ -1666,10 +1617,7 @@ function readURL(){
     var c=p.get("cat"); if(c && ["repair","metabolic","longevity","growth","supplies"].indexOf(c)>-1) currentFilter=c;
     var s=p.get("sort"); if(s && ["featured","price-asc","price-desc","permg-asc","purity-desc","rating-desc","name-asc"].indexOf(s)>-1) sortSelect.value=s;
     var q=p.get("q"); if(q){ searchInput.value=q; searchTerm=q.trim().toLowerCase(); searchClear.hidden=!q; }
-    var pur=parseFloat(p.get("pur")); if(pur>0) fPurity=pur;
-    var sz=p.get("size"); if(sz) fSizeSel=sz.split(",").filter(Boolean);
-    var pm=p.get("permg"); if(pm && ["lt2","2to5","gt5"].indexOf(pm)>-1) fPermg=pm;
-    if(p.get("stock")==="in") fStock=true;
+
     if(p.get("all")==="1") expandFromURL=true;
   }catch(e){}
 }
@@ -1930,7 +1878,7 @@ renderRecent();
 renderCompareTray();
 sortCards(sortSelect.value);
 setExpanded(true);
-if(advActive() && advFilters){ advFilters.hidden=false; if(filtersToggle){ filtersToggle.classList.add("on"); filtersToggle.setAttribute("aria-expanded","true"); } }
+
 setFilter(currentFilter);
 
 /* export a small API for the catalog UX layer (catalog-plus.js) */

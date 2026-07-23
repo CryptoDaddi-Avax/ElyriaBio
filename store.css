@@ -1248,7 +1248,7 @@ input:focus-visible,textarea:focus-visible{outline-offset:0}
    iOS — landscape-notch gutters + tap responsiveness
    ============================================================ */
 /* remove the 300ms tap delay / double-tap zoom on controls */
-a,button,summary,label,select,.pill,.fchip,.tb-btn,.btn,.stepper button,.li-stepper button{touch-action:manipulation}
+a,button,summary,label,select,.pill,.tb-btn,.btn,.stepper button,.li-stepper button{touch-action:manipulation}
 
 /* keep gutters clear of the sensor housing in landscape (env is 0 in portrait,
    so max() never shrinks the design padding) */
