@@ -75,6 +75,54 @@
   });
   if(tiers.length) paintTiers();
 
+  /* ---------- size-variant tabs (.stier) ---------- */
+  var stiers = Array.prototype.slice.call(scope.querySelectorAll(".stier"));
+  if(stiers.length){
+    function activateStier(st){
+      stiers.forEach(function(s){ s.classList.remove("on"); s.setAttribute("aria-checked","false"); });
+      st.classList.add("on"); st.setAttribute("aria-checked","true");
+      var newPrice = parseFloat(st.getAttribute("data-price")) || unit;
+      var newMg    = parseFloat(st.getAttribute("data-mg"))    || mgPerVial;
+      var newSize  = newMg + " mg";
+      // update buy-box unit price + mg label
+      unit       = newPrice;
+      mgPerVial  = newMg;
+      size       = newSize;
+      // remove fixed data-total on tiers so price recalculates from unit
+      tiers.forEach(function(t){ t.removeAttribute("data-total"); });
+      paintTiers();
+      // update inventory panel for this size
+      var stockKey = newMg === parseFloat(scope.getAttribute("data-size")) ? null : newSize;
+      var qty = readStock(id, stockKey);
+      var stockEl = scope.querySelector(".pdp-stock");
+      if(stockEl){
+        if(qty <= 0){
+          stockEl.className = "pdp-stock";
+          stockEl.innerHTML = '<span class="sdot" style="background:#8a8a8a;box-shadow:none"></span>Out of stock — '+newSize+' unavailable';
+        } else {
+          var low = qty <= 5;
+          stockEl.className = 'pdp-stock'+(low?' low':'');
+          var countTxt = low ? ('Only '+qty+' left') : (qty+' vials available');
+          var pk3 = Math.floor(qty/3), pk5 = Math.floor(qty/5);
+          stockEl.innerHTML =
+            '<span class="sdot"></span>'+countTxt+' \u00b7 ships from the U.S. within 48 hours'+
+            '<div class="pdp-inv-row">'+
+              '<div class="pdp-inv-cell"><span class="pdp-inv-n">'+qty+'</span><span class="pdp-inv-k">individual vials</span></div>'+
+              '<div class="pdp-inv-div"></div>'+
+              '<div class="pdp-inv-cell"><span class="pdp-inv-n">'+pk3+'</span><span class="pdp-inv-k">3-vial packs avail.</span></div>'+
+              '<div class="pdp-inv-div"></div>'+
+              '<div class="pdp-inv-cell"><span class="pdp-inv-n">'+pk5+'</span><span class="pdp-inv-k">5-vial packs avail.</span></div>'+
+            '</div>';
+        }
+      }
+    }
+    stiers.forEach(function(st){
+      st.addEventListener("click", function(){ activateStier(st); });
+      st.addEventListener("keydown", function(e){ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); st.click(); } });
+    });
+  }
+
+
   var addBtn = scope.querySelector("#pdpAdd");
   if(addBtn){
     addBtn.addEventListener("click", function(){
