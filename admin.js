@@ -475,27 +475,67 @@
     if (prodFilter.cat !== "all") list = list.filter(function (p) { return p.cat === prodFilter.cat; });
     if (prodFilter.q) { var q = prodFilter.q.toLowerCase(); list = list.filter(function (p) { return p.name.toLowerCase().indexOf(q) >= 0; }); }
     list.sort(function (a, b) { return (sold[b.id] || 0) - (sold[a.id] || 0); });
-    $("#prodBody").innerHTML = list.map(function (p) {
-      var margin = (p.price - p.cost) / p.price * 100;
-      var low = p.stock <= p.reorder, crit = p.stock <= p.reorder * 0.5;
-      var statusPill = crit ? "<span class='pill hold'>reorder</span>" : low ? "<span class='pill verifying'>low</span>" : "<span class='pill released'>in stock</span>";
-      return "<tr><td><div class='cell-prod'><span class='prod-chip'>" + p.name.slice(0, 2).toUpperCase() + "</span><div><div class='t-strong'>" + p.name + "</div><div class='t-mut' style='font-size:11px;font-family:IBM Plex Mono,monospace'>" + p.size + "</div></div></div></td>"
-        + "<td class='t-mut' style='text-transform:capitalize'>" + p.cat + "</td>"
-        + "<td class='t-num'>" + money(p.price, 2) + "</td>"
-        + "<td class='t-num'>" + margin.toFixed(0) + "%</td>"
-        + "<td class='t-num'>" + (sold[p.id] || 0) + "</td>"
-        + "<td class='t-num'><input type='number' min='0' class='stock-edit' data-pid='" + p.id + "' value='" + p.stock + "' style='width:64px;text-align:right;background:transparent;border:1px solid var(--line);border-radius:6px;color:" + (crit ? "var(--neg)" : low ? "var(--accent)" : "inherit") + ";font:inherit;padding:3px 6px'></td>"
-        + "<td>" + statusPill + "</td>"
-        + "<td class='t-mut'>" + p.purity + "</td></tr>";
-    }).join("");
+
+    var rows = "";
+    list.forEach(function (p) {
+      if (p.variants && p.variants.length > 1) {
+        // Multi-size product: one row per variant
+        p.variants.forEach(function (v, idx) {
+          var key = p.id + "|" + v.size;
+          var vstock = v.stock != null ? v.stock : 0;
+          var low = vstock <= Math.round(p.reorder / p.variants.length);
+          var crit = vstock <= Math.round(p.reorder / p.variants.length * 0.5);
+          var statusPill = crit ? "<span class='pill hold'>reorder</span>" : low ? "<span class='pill verifying'>low</span>" : "<span class='pill released'>in stock</span>";
+          var margin = (v.price - v.cost) / v.price * 100;
+          if (idx === 0) {
+            // First variant row: show product name + chip
+            rows += "<tr><td><div class='cell-prod'><span class='prod-chip'>" + p.name.slice(0, 2).toUpperCase() + "</span><div><div class='t-strong'>" + p.name + "</div><div class='t-mut' style='font-size:11px;font-family:IBM Plex Mono,monospace'>" + v.size + "</div></div></div></td>"
+              + "<td class='t-mut' style='text-transform:capitalize'>" + p.cat + "</td>"
+              + "<td class='t-num'>" + money(v.price, 2) + "</td>"
+              + "<td class='t-num'>" + margin.toFixed(0) + "%</td>"
+              + "<td class='t-num'>" + (sold[p.id] || 0) + "</td>"
+              + "<td class='t-num'><input type='number' min='0' class='stock-edit' data-pid='" + key + "' value='" + vstock + "' style='width:64px;text-align:right;background:transparent;border:1px solid var(--line);border-radius:6px;color:" + (crit ? "var(--neg)" : low ? "var(--accent)" : "inherit") + ";font:inherit;padding:3px 6px'></td>"
+              + "<td>" + statusPill + "</td>"
+              + "<td class='t-mut'>" + p.purity + "</td></tr>";
+          } else {
+            // Sub-variant row: indented size label, no chip/cat/sold
+            rows += "<tr style='background:rgba(255,255,255,.02)'><td><div class='cell-prod' style='padding-left:44px'><div class='t-mut' style='font-size:11px;font-family:IBM Plex Mono,monospace'>" + v.size + "</div></div></td>"
+              + "<td></td>"
+              + "<td class='t-num'>" + money(v.price, 2) + "</td>"
+              + "<td class='t-num'>" + margin.toFixed(0) + "%</td>"
+              + "<td></td>"
+              + "<td class='t-num'><input type='number' min='0' class='stock-edit' data-pid='" + key + "' value='" + vstock + "' style='width:64px;text-align:right;background:transparent;border:1px solid var(--line);border-radius:6px;color:" + (crit ? "var(--neg)" : low ? "var(--accent)" : "inherit") + ";font:inherit;padding:3px 6px'></td>"
+              + "<td>" + statusPill + "</td>"
+              + "<td></td></tr>";
+          }
+        });
+      } else {
+        // Single-size product: original single row
+        var margin = (p.price - p.cost) / p.price * 100;
+        var low = p.stock <= p.reorder, crit = p.stock <= p.reorder * 0.5;
+        var statusPill = crit ? "<span class='pill hold'>reorder</span>" : low ? "<span class='pill verifying'>low</span>" : "<span class='pill released'>in stock</span>";
+        rows += "<tr><td><div class='cell-prod'><span class='prod-chip'>" + p.name.slice(0, 2).toUpperCase() + "</span><div><div class='t-strong'>" + p.name + "</div><div class='t-mut' style='font-size:11px;font-family:IBM Plex Mono,monospace'>" + p.size + "</div></div></div></td>"
+          + "<td class='t-mut' style='text-transform:capitalize'>" + p.cat + "</td>"
+          + "<td class='t-num'>" + money(p.price, 2) + "</td>"
+          + "<td class='t-num'>" + margin.toFixed(0) + "%</td>"
+          + "<td class='t-num'>" + (sold[p.id] || 0) + "</td>"
+          + "<td class='t-num'><input type='number' min='0' class='stock-edit' data-pid='" + p.id + "' value='" + p.stock + "' style='width:64px;text-align:right;background:transparent;border:1px solid var(--line);border-radius:6px;color:" + (crit ? "var(--neg)" : low ? "var(--accent)" : "inherit") + ";font:inherit;padding:3px 6px'></td>"
+          + "<td>" + statusPill + "</td>"
+          + "<td class='t-mut'>" + p.purity + "</td></tr>";
+      }
+    });
+    $("#prodBody").innerHTML = rows;
+
     Array.prototype.slice.call($("#prodBody").querySelectorAll(".stock-edit")).forEach(function(inp){
       inp.addEventListener("change", function(){
-        D.setStock(state, inp.getAttribute("data-pid"), inp.value);
-        if(window.ElyriaAPI && window.ElyriaAPI.configured){ window.ElyriaAPI.setStock(inp.getAttribute("data-pid"), Math.max(0, parseInt(inp.value,10)||0)); }
+        var pid = inp.getAttribute("data-pid");
+        D.setStock(state, pid, inp.value);
+        if(window.ElyriaAPI && window.ElyriaAPI.configured){ window.ElyriaAPI.setStock(pid, Math.max(0, parseInt(inp.value,10)||0)); }
         renderProducts();
       });
     });
   }
+
 
   /* ============================================================
      VIEW: CUSTOMERS

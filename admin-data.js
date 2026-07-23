@@ -25,36 +25,39 @@
 
   /* ---------- catalog (real Elyria SKUs) ---------- */
   // cost = our landed cost basis; used for margin. unit = sellable units on hand.
+  // variants = size options shown on the storefront; each gets its own stock key (id|size).
   var PRODUCTS = [
-    { id: "tirz",    name: "GLP-2",          cat: "metabolic",  size: "10 mg",  price: 179,    cost: 71,   purity: "99.3%", stock: 38,  reorder: 40 },
-    { id: "reta",    name: "GLP-3",          cat: "metabolic",  size: "10 mg",  price: 55.99,  cost: 21,   purity: "99.0%", stock: 22,  reorder: 35 },
-    { id: "bpc157",  name: "BPC-157",              cat: "repair",     size: "10 mg",  price: 39.99,  cost: 9.4,  purity: "99.4%", stock: 412, reorder: 120 },
-    { id: "tb500",   name: "TB-500",               cat: "repair",     size: "10 mg",  price: 44.99,  cost: 9.8,  purity: "99.2%", stock: 286, reorder: 120 },
-    { id: "ghkcu",   name: "GHK-Cu",               cat: "longevity",  size: "50 mg",  price: 29.99,  cost: 6.1,  purity: "99.6%", stock: 540, reorder: 150 },
-    { id: "ipa",     name: "Ipamorelin",           cat: "growth",     size: "10 mg",  price: 39.99,  cost: 11.2, purity: "99.5%", stock: 318, reorder: 120 },
-    { id: "tesa",    name: "Tesamorelin",          cat: "growth",     size: "10 mg",  price: 49.99,  cost: 19,   purity: "99.2%", stock: 96,  reorder: 60 },
-    { id: "cjcipa",  name: "CJC-1295/Ipamorelin",  cat: "growth",     size: "10 mg",  price: 47.99,  cost: 14.5, purity: "99.3%", stock: 174, reorder: 90 },
-    { id: "epi",     name: "Epithalon",            cat: "longevity",  size: "10 mg",  price: 23.99,  cost: 5.8,  purity: "99.7%", stock: 263, reorder: 100 },
-    { id: "semax",   name: "Semax",                cat: "longevity",  size: "10 mg",  price: 23.99,  cost: 6.4,  purity: "99.4%", stock: 198, reorder: 90 },
-    { id: "selank",  name: "Selank",               cat: "longevity",  size: "10 mg",  price: 23.99,  cost: 6.6,  purity: "99.3%", stock: 156, reorder: 90 },
-    { id: "mt2",     name: "Melanotan II",         cat: "metabolic",  size: "10 mg",  price: 23.99,  cost: 5.2,  purity: "99.1%", stock: 384, reorder: 120 },
-    { id: "dsip",    name: "DSIP",                 cat: "longevity",  size: "10 mg",  price: 23.99,  cost: 6.9,  purity: "99.5%", stock: 142, reorder: 80 },
-    { id: "kiss",    name: "Kisspeptin",           cat: "metabolic",  size: "10 mg",  price: 54,     cost: 18,   purity: "99.2%", stock: 74,  reorder: 60 },
-    { id: "kpv",     name: "KPV",                  cat: "repair",     size: "10 mg",  price: 31.99,  cost: 9.1,  purity: "99.4%", stock: 168, reorder: 80 },
-    { id: "motsc",   name: "MOTS-c",               cat: "metabolic",  size: "20 mg",  price: 59.99,  cost: 10.2, purity: "99.2%", stock: 121, reorder: 70 },
-    { id: "nad",     name: "NAD+",                 cat: "longevity",  size: "500 mg", price: 55.99,  cost: 17.5, purity: "99.5%", stock: 132, reorder: 70 },
-    { id: "gluta",   name: "Glutathione",          cat: "longevity",  size: "10 mg",  price: 47.99,  cost: 13,   purity: "99.6%", stock: 144, reorder: 70 },
-    { id: "mt1",     name: "Melanotan I",          cat: "metabolic",  size: "10 mg",  price: 23.99,  cost: 5.4,  purity: "99.1%", stock: 210, reorder: 90 },
-    { id: "pt141",   name: "PT-141",               cat: "metabolic",  size: "10 mg",  price: 23.99,  cost: 5.9,  purity: "99.2%", stock: 256, reorder: 100 },
-    { id: "aod",     name: "AOD-9604",             cat: "metabolic",  size: "10 mg",  price: 39.99,  cost: 12,   purity: "99.3%", stock: 118, reorder: 70 },
-    { id: "cagri",   name: "Cagrilintide",         cat: "metabolic",  size: "10 mg",  price: 55.99,  cost: 20,   purity: "99.2%", stock: 88,  reorder: 60 },
-    { id: "igf1lr3", name: "IGF-1 LR3",            cat: "growth",     size: "1 mg",   price: 55.99,  cost: 19.5, purity: "99.0%", stock: 64,  reorder: 50 },
-    { id: "amino1mq",name: "5-Amino-1MQ",          cat: "metabolic",  size: "10 mg",  price: 39.99,  cost: 12.8, purity: "99.4%", stock: 102, reorder: 60 },
-    { id: "klow",    name: "KLOW Blend",           cat: "repair",     size: "80 mg",  price: 99.99,  cost: 28,   purity: "99.2%", stock: 51,  reorder: 40 },
-    { id: "wolverine",name: "BPC-157 / TB-500 Blend", cat: "repair",  size: "20 mg",  price: 79.99,  cost: 15.6, purity: "99.3%", stock: 96,  reorder: 50 },
-    { id: "snap8",   name: "SNAP-8",               cat: "longevity",  size: "10 mg",  price: 23.99,  cost: 6.8,  purity: "99.3%", stock: 84,  reorder: 50 },
-    { id: "ta1",     name: "Thymosin Alpha-1",     cat: "longevity",  size: "10 mg",  price: 31.99,  cost: 9.6,  purity: "99.4%", stock: 67,  reorder: 50 },
-    { id: "glow",    name: "GLOW Blend",           cat: "longevity",  size: "10 mg",  price: 91.99,  cost: 26,   purity: "99.3%", stock: 79,  reorder: 50 }
+    { id: "tirz",     name: "GLP-2",                  cat: "metabolic",  size: "10 mg",  price: 179,    cost: 71,   purity: "99.3%", stock: 38,  reorder: 40 },
+    { id: "reta",     name: "GLP-3",                  cat: "metabolic",  size: "10 mg",  price: 55.99,  cost: 21,   purity: "99.0%", stock: 22,  reorder: 35,
+      variants: [ { size: "10 mg", price: 55.99, cost: 21 }, { size: "15 mg", price: 69.99, cost: 28 }, { size: "30 mg", price: 109.99, cost: 52 } ] },
+    { id: "bpc157",   name: "BPC-157",                cat: "repair",     size: "10 mg",  price: 39.99,  cost: 9.4,  purity: "99.4%", stock: 412, reorder: 120 },
+    { id: "tb500",    name: "TB-500",                 cat: "repair",     size: "10 mg",  price: 44.99,  cost: 9.8,  purity: "99.2%", stock: 286, reorder: 120 },
+    { id: "ghkcu",    name: "GHK-Cu",                 cat: "longevity",  size: "50 mg",  price: 29.99,  cost: 6.1,  purity: "99.6%", stock: 540, reorder: 150 },
+    { id: "ipa",      name: "Ipamorelin",             cat: "growth",     size: "10 mg",  price: 39.99,  cost: 11.2, purity: "99.5%", stock: 318, reorder: 120 },
+    { id: "tesa",     name: "Tesamorelin",            cat: "growth",     size: "10 mg",  price: 49.99,  cost: 19,   purity: "99.2%", stock: 96,  reorder: 60 },
+    { id: "cjcipa",   name: "CJC-1295/Ipamorelin",   cat: "growth",     size: "10 mg",  price: 47.99,  cost: 14.5, purity: "99.3%", stock: 174, reorder: 90 },
+    { id: "epi",      name: "Epithalon",              cat: "longevity",  size: "10 mg",  price: 23.99,  cost: 5.8,  purity: "99.7%", stock: 263, reorder: 100 },
+    { id: "semax",    name: "Semax",                  cat: "longevity",  size: "10 mg",  price: 23.99,  cost: 6.4,  purity: "99.4%", stock: 198, reorder: 90 },
+    { id: "selank",   name: "Selank",                 cat: "longevity",  size: "10 mg",  price: 23.99,  cost: 6.6,  purity: "99.3%", stock: 156, reorder: 90 },
+    { id: "mt2",      name: "Melanotan II",           cat: "metabolic",  size: "10 mg",  price: 23.99,  cost: 5.2,  purity: "99.1%", stock: 384, reorder: 120 },
+    { id: "dsip",     name: "DSIP",                   cat: "longevity",  size: "10 mg",  price: 23.99,  cost: 6.9,  purity: "99.5%", stock: 142, reorder: 80 },
+    { id: "kiss",     name: "Kisspeptin",             cat: "metabolic",  size: "10 mg",  price: 54,     cost: 18,   purity: "99.2%", stock: 74,  reorder: 60 },
+    { id: "kpv",      name: "KPV",                   cat: "repair",     size: "10 mg",  price: 31.99,  cost: 9.1,  purity: "99.4%", stock: 168, reorder: 80 },
+    { id: "motsc",    name: "MOTS-c",                 cat: "metabolic",  size: "20 mg",  price: 59.99,  cost: 10.2, purity: "99.2%", stock: 121, reorder: 70,
+      variants: [ { size: "20 mg", price: 59.99, cost: 10.2 }, { size: "40 mg", price: 99.99, cost: 18 } ] },
+    { id: "nad",      name: "NAD+",                  cat: "longevity",  size: "500 mg", price: 55.99,  cost: 17.5, purity: "99.5%", stock: 132, reorder: 70 },
+    { id: "gluta",    name: "Glutathione",            cat: "longevity",  size: "10 mg",  price: 47.99,  cost: 13,   purity: "99.6%", stock: 144, reorder: 70 },
+    { id: "mt1",      name: "Melanotan I",            cat: "metabolic",  size: "10 mg",  price: 23.99,  cost: 5.4,  purity: "99.1%", stock: 210, reorder: 90 },
+    { id: "pt141",    name: "PT-141",                 cat: "metabolic",  size: "10 mg",  price: 23.99,  cost: 5.9,  purity: "99.2%", stock: 256, reorder: 100 },
+    { id: "aod",      name: "AOD-9604",               cat: "metabolic",  size: "10 mg",  price: 39.99,  cost: 12,   purity: "99.3%", stock: 118, reorder: 70 },
+    { id: "cagri",    name: "Cagrilintide",           cat: "metabolic",  size: "10 mg",  price: 55.99,  cost: 20,   purity: "99.2%", stock: 88,  reorder: 60 },
+    { id: "igf1lr3",  name: "IGF-1 LR3",             cat: "growth",     size: "1 mg",   price: 55.99,  cost: 19.5, purity: "99.0%", stock: 64,  reorder: 50 },
+    { id: "amino1mq", name: "5-Amino-1MQ",           cat: "metabolic",  size: "10 mg",  price: 39.99,  cost: 12.8, purity: "99.4%", stock: 102, reorder: 60 },
+    { id: "klow",     name: "KLOW Blend",             cat: "repair",     size: "80 mg",  price: 99.99,  cost: 28,   purity: "99.2%", stock: 51,  reorder: 40 },
+    { id: "wolverine",name: "BPC-157 / TB-500 Blend", cat: "repair",    size: "20 mg",  price: 79.99,  cost: 15.6, purity: "99.3%", stock: 96,  reorder: 50 },
+    { id: "snap8",    name: "SNAP-8",                 cat: "longevity",  size: "10 mg",  price: 23.99,  cost: 6.8,  purity: "99.3%", stock: 84,  reorder: 50 },
+    { id: "ta1",      name: "Thymosin Alpha-1",       cat: "longevity",  size: "10 mg",  price: 31.99,  cost: 9.6,  purity: "99.4%", stock: 67,  reorder: 50 },
+    { id: "glow",     name: "GLOW Blend",             cat: "longevity",  size: "10 mg",  price: 91.99,  cost: 26,   purity: "99.3%", stock: 79,  reorder: 50 }
   ];
 
   // relative demand weight per product (bestsellers pulled harder)
@@ -329,8 +332,20 @@
 
     // Stock starts at 0 — real numbers come from Supabase
     var products = PRODUCTS.map(function (p) {
-      var s = stockOverrides[p.id] != null ? stockOverrides[p.id] : 0;
-      return Object.assign({}, p, { stock: s });
+      var base = Object.assign({}, p);
+      if (p.variants) {
+        base.variants = p.variants.map(function (v) {
+          var key = p.id + "|" + v.size;
+          var s = stockOverrides[key] != null ? stockOverrides[key] : 0;
+          return Object.assign({}, v, { stock: s });
+        });
+        // top-level stock = sum of all variants
+        base.stock = base.variants.reduce(function (a, v) { return a + v.stock; }, 0);
+      } else {
+        var s = stockOverrides[p.id] != null ? stockOverrides[p.id] : 0;
+        base.stock = s;
+      }
+      return base;
     });
 
     return {
@@ -343,8 +358,18 @@
   function setStock(state, id, qty) {
     qty = Math.max(0, parseInt(qty, 10) || 0);
     state.stockOverrides[id] = qty;
-    var p = state.products.filter(function (x) { return x.id === id; })[0];
-    if (p) p.stock = qty;
+    // id may be "pid" (single-size) or "pid|size" (variant)
+    var bareId = id.indexOf("|") > -1 ? id.split("|")[0] : id;
+    var sizeKey = id.indexOf("|") > -1 ? id.split("|")[1] : null;
+    var p = state.products.filter(function (x) { return x.id === bareId; })[0];
+    if (p) {
+      if (sizeKey && p.variants) {
+        var v = p.variants.filter(function (x) { return x.size === sizeKey; })[0];
+        if (v) v.stock = qty;
+      } else {
+        p.stock = qty;
+      }
+    }
     persist(state);
   }
   function persist(state) {
