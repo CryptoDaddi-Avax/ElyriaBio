@@ -109,14 +109,10 @@ function scrollToEl(el){ if(!el) return; var r=el.getBoundingClientRect(); windo
 /* ===================== VARIANTS, KEYS & CATALOG HELPERS ===================== */
 function mgOf(p){ var v=parseFloat(p.size); return (!p.supply && /mg\b/i.test(p.size) && v>0) ? v : 0; }
 function fmtMg(n){ return (Number.isInteger(n)?n:n.toFixed(1))+" mg"; }
-/* Each mg-based peptide is offered as a half-size vial (modest per-mg premium) plus the native size.
-   Products with a custom `variants` array bypass this logic entirely. */
+/* Products with a custom `variants` array show those sizes; all others show no size selector. */
 function variantsFor(p){
   if(p.variants) return p.variants;
-  var mg=mgOf(p); if(!mg) return null;
-  var half=mg/2; if(half<1) return null;
-  var halfPrice=Math.round(p.price*0.62*100)/100;
-  return [ {mg:half, size:fmtMg(half), price:halfPrice}, {mg:mg, size:p.size, price:p.price} ];
+  return null;
 }
 /* Cart keys: native size uses the bare id (back-compatible); a chosen non-native size is "id|mg". */
 function splitKey(key){ var s=String(key), i=s.indexOf("|"); return i<0?{id:s,mg:null}:{id:s.slice(0,i),mg:parseFloat(s.slice(i+1))}; }
