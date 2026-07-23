@@ -920,12 +920,82 @@ body.intro-open{overflow:hidden}
 .verify .shaderbg{position:absolute;inset:0;z-index:0;width:100%;height:100%;display:block}
 
 @media(max-width:860px){
-  /* cinema hidden — no scroll animation; hero = one viewport */
+  /* ── STOP WebGL canvases — gradient fallback takes over ── */
+  .hero-stage .shaderbg,
+  .hero-stage .assembly-gl,
+  .hero-stage .molecule { display:none!important }
+
+  /* ── Premium mobile gradient: deep abyss with warm accent glow ── */
+  .hero-stage .vfallback {
+    background:
+      radial-gradient(80% 55% at 50% 8%,rgba(var(--accent-rgb),.22),transparent 60%),
+      radial-gradient(60% 45% at 20% 100%,rgba(176,122,42,.18),transparent 55%),
+      radial-gradient(55% 40% at 80% 90%,rgba(var(--accent-rgb),.08),transparent 50%),
+      linear-gradient(180deg,#09080600 0%,#060504 100%),
+      #060504
+  }
+
+  /* ── Solid dark veil — no transparency windows for canvas bleed ── */
+  .hero-veil {
+    background: linear-gradient(180deg,
+      rgba(6,5,4,.92) 0%,
+      rgba(6,5,4,.62) 32%,
+      rgba(6,5,4,.52) 52%,
+      rgba(6,5,4,.72) 76%,
+      rgba(6,5,4,.95) 100%)
+  }
+
+  /* ── Layout: no cinema scroll, just one viewport ── */
   .hero-scroll{height:auto}
   .hero-stage{position:relative;height:100svh;min-height:560px}
-  /* ensure hero copy is always visible (synth-armed normally hides it for cinema) */
-  .synth-armed .hero-sub,.synth-armed .hero-cta,.synth-armed .hero-trust{opacity:1!important}
-  .hero-overlay-in{padding:120px 18px 70px}
+
+  /* ── Content layout: tighter, more intentional rhythm ── */
+  .hero-overlay-in{
+    padding: calc(var(--nav-h,64px) + 36px) 24px 32px;
+    justify-content: center;
+    gap: 0
+  }
+  .hero-top { gap:12px; margin-bottom:20px }
+  .hero-bottom { gap:20px }
+
+  /* ── Eyebrow: smaller so it reads on one line ── */
+  .hero-eyebrow.eyebrow { font-size:9.5px; letter-spacing:.2em }
+
+  /* ── Ensure hero copy always visible (synth-armed hides it for desktop cinema) ── */
+  .synth-armed .hero-sub,
+  .synth-armed .hero-cta,
+  .synth-armed .hero-trust { opacity:1!important }
+
+  /* ── Hero sub: slightly smaller, better line-height ── */
+  .hero-overlay .hero-sub { font-size:15px; max-width:38ch; line-height:1.6 }
+
+  /* ── Trust row: 2x2 bordered grid — premium stat display ── */
+  .hero-trust.trust-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    max-width: 360px;
+    margin: 0 auto;
+    border: 1px solid rgba(var(--accent-rgb),.18);
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(6,5,4,.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .hero-trust.trust-row .trust {
+    padding: 14px 16px;
+    gap: 4px;
+    align-items: center;
+    border-right: 1px solid rgba(var(--accent-rgb),.14);
+    border-bottom: 1px solid rgba(var(--accent-rgb),.14);
+  }
+  .hero-trust.trust-row .trust:nth-child(2),
+  .hero-trust.trust-row .trust:nth-child(4) { border-right: none }
+  .hero-trust.trust-row .trust:nth-child(3),
+  .hero-trust.trust-row .trust:nth-child(4) { border-bottom: none }
+  .hero-trust .tv { font-size:20px }
+  .hero-trust .tl { font-size:9px; letter-spacing:.1em }
 }
 @media (prefers-reduced-motion: reduce){
   .hero-scroll{height:auto!important}
@@ -942,7 +1012,7 @@ html{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
 /* dynamic-viewport pinned hero (iOS address-bar safe) */
 .hero-stage{ height:100svh }
 @supports (height:100dvh){ .hero-stage{ height:100dvh } }
-@supports (height:100dvh){ .hero-scroll{ height:175dvh } }
+@media(min-width:861px){ @supports (height:100dvh){ .hero-scroll{ height:175dvh } } }
 
 /* iOS Safari needs the -webkit- prefix for frosted glass */
 .nav.solid,.mobile-nav,.search-suggest,.shop-toolbar,.shop-toolbar::before,

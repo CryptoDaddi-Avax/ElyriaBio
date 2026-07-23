@@ -10,8 +10,10 @@
 "use strict";
 
 var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-var isSmall = window.matchMedia('(max-width: 760px)').matches;
-var DPR = Math.min(window.devicePixelRatio || 1, isSmall ? 1.6 : 2.25);
+var isSmall = window.matchMedia('(max-width: 860px)').matches;
+/* on mobile the canvas is hidden and we use the CSS gradient hero — bail out entirely */
+if(isSmall){ return; }
+var DPR = Math.min(window.devicePixelRatio || 1, 2.25);
 
 /* shared interaction state */
 var SYN = { mx: window.innerWidth*0.5, my: window.innerHeight*0.4, progress: 0, time: 0 };
