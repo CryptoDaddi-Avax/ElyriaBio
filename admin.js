@@ -453,7 +453,12 @@
 
     var lowCount = state.products.filter(function (p) { return p.stock <= p.reorder; }).length;
     var totalUnits = state.products.reduce(function (a, p) { return a + p.stock; }, 0);
-    var invValue = state.products.reduce(function (a, p) { return a + p.stock * p.cost; }, 0);
+    var invValue = state.products.reduce(function (a, p) {
+      if (p.variants && p.variants.length > 1) {
+        return a + p.variants.reduce(function (b, v) { return b + (v.stock || 0) * v.cost; }, 0);
+      }
+      return a + p.stock * p.cost;
+    }, 0);
     var html = "<div class='statrow' style='margin-bottom:18px'>"
       + "<div class='sr-cell'><div class='sr-k'>SKUs</div><div class='sr-v'>" + state.products.length + "</div></div>"
       + "<div class='sr-cell'><div class='sr-k'>Units on hand</div><div class='sr-v'>" + totalUnits.toLocaleString() + "</div></div>"
