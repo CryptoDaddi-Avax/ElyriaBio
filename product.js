@@ -148,9 +148,9 @@
     var stockEl = scope.querySelector(".pdp-stock");
     var buyBox = scope.querySelector(".buy-box");
     if(!stockEl || !buyBox) return;
-    var api = window.ElyriaAPI;
-    if(api && api.configured){ api.getStock(id).then(function(q){ paintStock(q==null?readStock(id,size):q); }); }
-    else paintStock(readStock(id, size));
+    // Always read from localStorage → STOCK_FALLBACK (Supabase has stale data for variant products)
+    paintStock(readStock(id, size));
+
     function paintStock(qty){
     if(qty==null) return;
     if(qty<=0){
