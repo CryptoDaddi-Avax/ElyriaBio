@@ -458,7 +458,7 @@ function buildCard(p){
         '<div class="card-priceline"><div class="card-price'+(COMING_SOON[p.id]?' cs-price':'')+' " data-price="'+p.id+'">'+cardPriceHTML(p, cardSize[p.id])+'</div><span class="'+stockCls+'"><span class="sdot"></span>'+stockTxt+'</span></div>'+
         (p.supply?'':'<button class="card-coa" data-coatoggle="'+p.id+'" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M5 3h9l5 5v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M9 13l2 2 4-4"/></svg>View certificate of analysis</button><div class="coa-inline" data-coainline="'+p.id+'" hidden></div>')+
       '</div>'+
-    '</div>'+
+    '</div>';
 
   /* Make entire card clickable — navigate to product page */
   card.style.cursor = "pointer";
