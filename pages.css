@@ -57,9 +57,16 @@
 .add-btn:active{transform:scale(.98)}
 .add-btn.added{background:linear-gradient(180deg,#bfe6c6,#7fcf94)}
 .add-btn svg{width:18px;height:18px}
-.pdp-stock{display:inline-flex;align-items:center;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;color:var(--mist);margin-bottom:8px}
-.pdp-stock .sdot{width:7px;height:7px;border-radius:50%;background:#7fcf94;box-shadow:0 0 8px #7fcf94}
+.pdp-stock{display:flex;flex-direction:column;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;color:var(--mist);margin-bottom:8px}
+.pdp-stock>:first-child{display:flex;align-items:center;gap:8px}
+.pdp-stock .sdot{width:7px;height:7px;border-radius:50%;background:#7fcf94;box-shadow:0 0 8px #7fcf94;flex:none}
 .pdp-stock.low .sdot{background:#e7b86a;box-shadow:0 0 8px #e7b86a}
+.pdp-inv-row{display:flex;align-items:center;gap:0;margin-top:10px;background:rgba(231,192,106,.06);border:1px solid rgba(231,192,106,.14);border-radius:10px;overflow:hidden}
+.pdp-inv-cell{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 14px;gap:3px}
+.pdp-inv-n{font-family:"Jost",sans-serif;font-weight:500;font-size:22px;color:var(--gold, #e7c06a);letter-spacing:-.01em;line-height:1}
+.pdp-inv-k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;color:var(--mist);text-transform:uppercase;text-align:center}
+.pdp-inv-div{width:1px;align-self:stretch;background:rgba(231,192,106,.14)}
+
 
 .pdp-assurance{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:18px;padding-top:20px;border-top:1px solid var(--line)}
 .pdp-assurance .a{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mist)}

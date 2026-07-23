@@ -9,10 +9,15 @@
 (function(){
   "use strict";
   var STOCK_FALLBACK={tirz:38,reta:22,bpc157:412,tb500:286,ghkcu:540,ipa:318,tesa:96,cjcipa:174,epi:263,semax:198,selank:156,mt2:384,dsip:142,kiss:74,kpv:168,motsc:121,nad:132,gluta:144,mt1:210,pt141:256,aod:118,cagri:88,igf1lr3:64,amino1mq:102,klow:51,wolverine:96,snap8:84,ta1:67,glow:79};
-  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
-  function readStock(pid){
-    try{ var saved=JSON.parse(localStorage.getItem("elyria_admin_v1"));
-      if(saved&&saved.stockOverrides&&saved.stockOverrides[pid]!=null) return saved.stockOverrides[pid];
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  /* readStock supports both bare pid and pid|size keys for variants */
+  function readStock(pid, sizeKey){
+    try{ var saved=JSON.parse(localStorage.getItem('elyria_admin_v1'));
+      if(saved && saved.stockOverrides){
+        var varKey = sizeKey ? pid+'|'+sizeKey : null;
+        if(varKey && saved.stockOverrides[varKey]!=null) return saved.stockOverrides[varKey];
+        if(saved.stockOverrides[pid]!=null) return saved.stockOverrides[pid];
+      }
     }catch(e){}
     return STOCK_FALLBACK[pid];
   }
@@ -107,9 +112,18 @@
       });
     } else {
       var low = qty<=5;
-      stockEl.className = "pdp-stock"+(low?" low":"");
-      var countTxt = low ? ("Only "+qty+" left") : (qty+" vials available");
-      stockEl.innerHTML = '<span class="sdot"></span>'+countTxt+' · ships from the U.S. within 48 hours';
+      stockEl.className = 'pdp-stock'+(low?' low':'');
+      var countTxt = low ? ('Only '+qty+' left') : (qty+' vials available');
+      var pk3 = Math.floor(qty/3), pk5 = Math.floor(qty/5);
+      stockEl.innerHTML =
+        '<span class="sdot"></span>'+countTxt+' · ships from the U.S. within 48 hours'+
+        '<div class="pdp-inv-row">'+
+          '<div class="pdp-inv-cell"><span class="pdp-inv-n">'+qty+'</span><span class="pdp-inv-k">individual vials</span></div>'+
+          '<div class="pdp-inv-div"></div>'+
+          '<div class="pdp-inv-cell"><span class="pdp-inv-n">'+pk3+'</span><span class="pdp-inv-k">3-vial packs avail.</span></div>'+
+          '<div class="pdp-inv-div"></div>'+
+          '<div class="pdp-inv-cell"><span class="pdp-inv-n">'+pk5+'</span><span class="pdp-inv-k">5-vial packs avail.</span></div>'+
+        '</div>';
     }
     }
   })();
