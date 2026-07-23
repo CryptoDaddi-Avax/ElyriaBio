@@ -474,7 +474,7 @@
     var list = state.products.slice();
     if (prodFilter.cat !== "all") list = list.filter(function (p) { return p.cat === prodFilter.cat; });
     if (prodFilter.q) { var q = prodFilter.q.toLowerCase(); list = list.filter(function (p) { return p.name.toLowerCase().indexOf(q) >= 0; }); }
-    list.sort(function (a, b) { return (sold[b.id] || 0) - (sold[a.id] || 0); });
+    list.sort(function (a, b) { return a.name.localeCompare(b.name); });
 
     var rows = "";
     list.forEach(function (p) {
