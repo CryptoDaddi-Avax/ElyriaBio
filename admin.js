@@ -446,7 +446,17 @@
     // sales velocity per product (last 30d)
     var sold = {}; var rev = {};
     state.orders.filter(function (o) { return inRange(o, 30) && o.status !== "cancelled" && o.status !== "refunded"; }).forEach(function (o) {
-      o.items.forEach(function (it) { sold[it.id] = (sold[it.id] || 0) + it.qty; rev[it.id] = (rev[it.id] || 0) + it.price * it.qty; });
+      o.items.forEach(function (it) {
+        // track by full key (pid|size or bare pid)
+        sold[it.id] = (sold[it.id] || 0) + it.qty;
+        rev[it.id]  = (rev[it.id]  || 0) + it.price * it.qty;
+        // also roll up to bare pid total
+        var bareId = it.pid || (it.id.indexOf("|") > -1 ? it.id.split("|")[0] : it.id);
+        if (bareId !== it.id) {
+          sold[bareId] = (sold[bareId] || 0) + it.qty;
+          rev[bareId]  = (rev[bareId]  || 0) + it.price * it.qty;
+        }
+      });
     });
     var cats = ["all", "metabolic", "repair", "growth", "longevity"];
     var chips = cats.map(function (c) { return "<button class='chip " + (prodFilter.cat === c ? "active" : "") + "' data-pcat='" + c + "'>" + (c === "all" ? "All" : c) + "</button>"; }).join("");
@@ -501,7 +511,7 @@
               + "<td class='t-mut' style='text-transform:capitalize'>" + p.cat + "</td>"
               + "<td class='t-num'>" + money(v.price, 2) + "</td>"
               + "<td class='t-num'>" + margin.toFixed(0) + "%</td>"
-              + "<td class='t-num'>" + (sold[p.id] || 0) + "</td>"
+              + "<td class='t-num'>" + (sold[p.id] || 0) + " <span class='t-mut' style='font-size:10px'>total</span></td>"
               + "<td class='t-num'><input type='number' min='0' class='stock-edit' data-pid='" + key + "' value='" + vstock + "' style='width:64px;text-align:right;background:transparent;border:1px solid var(--line);border-radius:6px;color:" + (crit ? "var(--neg)" : low ? "var(--accent)" : "inherit") + ";font:inherit;padding:3px 6px'></td>"
               + packCell
               + "<td>" + statusPill + "</td>"
@@ -512,7 +522,7 @@
               + "<td></td>"
               + "<td class='t-num'>" + money(v.price, 2) + "</td>"
               + "<td class='t-num'>" + margin.toFixed(0) + "%</td>"
-              + "<td></td>"
+              + "<td class='t-num t-mut'>" + (sold[key] || 0) + "</td>"
               + "<td class='t-num'><input type='number' min='0' class='stock-edit' data-pid='" + key + "' value='" + vstock + "' style='width:64px;text-align:right;background:transparent;border:1px solid var(--line);border-radius:6px;color:" + (crit ? "var(--neg)" : low ? "var(--accent)" : "inherit") + ";font:inherit;padding:3px 6px'></td>"
               + packCell
               + "<td>" + statusPill + "</td>"

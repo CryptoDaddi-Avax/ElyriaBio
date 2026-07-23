@@ -244,8 +244,16 @@
           if (chosen[p.id]) { p = weightedProduct(r); }
           chosen[p.id] = 1;
           var qty = r() < 0.7 ? 1 : (r() < 0.92 ? 2 : 3);
-          items.push({ id: p.id, name: p.name, size: p.size, qty: qty, price: p.price, cost: p.cost });
-          sub += p.price * qty;
+          var itemId = p.id, itemSize = p.size, itemPrice = p.price, itemCost = p.cost;
+          if (p.variants && p.variants.length > 1) {
+            var v = p.variants[Math.floor(r() * p.variants.length)];
+            itemId = p.id + '|' + v.size;
+            itemSize = v.size;
+            itemPrice = v.price;
+            itemCost = v.cost;
+          }
+          items.push({ id: itemId, pid: p.id, name: p.name, size: itemSize, qty: qty, price: itemPrice, cost: itemCost });
+          sub += itemPrice * qty;
         }
 
         // discount sometimes
