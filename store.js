@@ -106,6 +106,35 @@ function purl(id){ return "products/"+(SLUGS[id]||id)+".html"; }
 function fmt(n){ return "$"+n.toFixed(2); }
 function scrollToEl(el){ if(!el) return; var r=el.getBoundingClientRect(); window.scrollTo({top:r.top+window.pageYOffset-90, behavior:"smooth"}); }
 
+/* ===================== PRESALE COUNTDOWN ===================== */
+// Ends July 24 2026 at noon EST (= 17:00 UTC)
+var PRESALE_END_MS = new Date('2026-07-24T17:00:00Z').getTime();
+// Fallback stock (mirrors product.js STOCK_FALLBACK for store-side reads)
+var PRESALE_STOCK_FB = {
+  bpc157:27, klow:30, tb500:30, tesa:67,
+  reta:50, motsc:6
+};
+function getPresaleStock(id){
+  try{
+    var saved = JSON.parse(localStorage.getItem('elyria_admin_v1'));
+    if(saved && saved.stockOverrides){
+      var v = saved.stockOverrides[id];
+      if(v != null) return Number(v);
+    }
+  }catch(e){}
+  return PRESALE_STOCK_FB[id] || 0;
+}
+function presaleCountdownHTML(id){
+  if(Date.now() >= PRESALE_END_MS) return ''; // expired
+  if(getPresaleStock(id) <= 0) return '';       // out of stock
+  var diff = PRESALE_END_MS - Date.now();
+  var h = Math.floor(diff/3600000);
+  var m = Math.floor((diff%3600000)/60000);
+  var s = Math.floor((diff%60000)/1000);
+  function pad(n){ return n<10?'0'+n:String(n); }
+  return '<div class="card-presale"><span class="cp-label">Presale</span><span class="cp-sep">·</span><span class="cp-timer">'+pad(h)+':'+pad(m)+':'+pad(s)+'</span></div>';
+}
+
 /* ===================== VARIANTS, KEYS & CATALOG HELPERS ===================== */
 function mgOf(p){ var v=parseFloat(p.size); return (!p.supply && /mg\b/i.test(p.size) && v>0) ? v : 0; }
 function fmtMg(n){ return (Number.isInteger(n)?n:n.toFixed(1))+" mg"; }
@@ -439,6 +468,7 @@ function buildCard(p){
   var stockTxt = p.stock==="low" ? "Low stock" : "In stock";
   card.innerHTML =
       '<div class="card-vis'+(COMING_SOON[p.id]?' cs-vis':'')+'">'+
+        presaleCountdownHTML(p.id)+
         '<div class="card-badges">'+badgeHTML(p)+'</div>'+
         '<button class="card-fav'+(favs[p.id]?" on":"")+'" data-fav="'+p.id+'" aria-label="Save '+p.name+'"><svg viewBox="0 0 24 24" stroke-width="1.7"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></button>'+
         '<button class="card-cmp'+(compare.indexOf(p.id)>-1?" on":"")+'" data-cmp="'+p.id+'" aria-label="Compare '+p.name+'" title="Add to compare"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M16 3l4 4-4 4M20 7H8M8 21l-4-4 4-4M4 17h12"/></svg></button>'+
@@ -471,6 +501,24 @@ function buildCard(p){
 /* Sort: available products first, coming-soon last */
 var _sorted = PRODUCTS.slice().sort(function(a,b){ return (COMING_SOON[a.id]?1:0)-(COMING_SOON[b.id]?1:0); });
 _sorted.forEach(function(p){ grid.appendChild(buildCard(p)); });
+/* ---- Presale ticker: update all countdown timers every second ---- */
+(function(){
+  if(Date.now() >= PRESALE_END_MS) return;
+  function pad(n){ return n<10?'0'+n:String(n); }
+  function tick(){
+    var diff = PRESALE_END_MS - Date.now();
+    if(diff <= 0){
+      var els = document.querySelectorAll('.card-presale');
+      for(var i=0;i<els.length;i++) els[i].style.display='none';
+      return;
+    }
+    var h=Math.floor(diff/3600000), m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
+    var txt = pad(h)+':'+pad(m)+':'+pad(s);
+    var timers = document.querySelectorAll('.cp-timer');
+    for(var j=0;j<timers.length;j++) timers[j].textContent = txt;
+  }
+  setInterval(tick, 1000);
+})();
 var cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
 /* Force .in on all cards immediately so opacity:0 (.rv) doesn't hide them
    before the IntersectionObserver has a chance to fire */

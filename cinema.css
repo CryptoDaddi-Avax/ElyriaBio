@@ -280,3 +280,72 @@ input:focus-visible,textarea:focus-visible{outline-offset:0}
   a{color:#141414 !important;text-decoration:none !important}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none !important}
 }
+
+/* ============================================================
+   PRESALE COUNTDOWN BADGE
+   ============================================================ */
+.card-presale{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:7px 12px 8px;
+  background:linear-gradient(90deg,#1a1308 0%,#2e1e06 40%,#1a1308 100%);
+  border-top:1px solid rgba(231,192,106,.28);
+  overflow:hidden;
+}
+.card-presale::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(231,192,106,.10) 50%,transparent 100%);
+  animation:presale-shimmer 2.4s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes presale-shimmer{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
+}
+.cp-label{
+  font:600 10px/1 'Jost',sans-serif;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#e7c06a;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.cp-label::before{
+  content:'';
+  display:inline-block;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#e7c06a;
+  box-shadow:0 0 6px 2px rgba(231,192,106,.55);
+  animation:presale-pulse 1.2s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes presale-pulse{
+  0%,100%{box-shadow:0 0 4px 1px rgba(231,192,106,.5)}
+  50%{box-shadow:0 0 10px 4px rgba(231,192,106,.85)}
+}
+.cp-sep{
+  color:rgba(231,192,106,.35);
+  font-size:11px;
+  font-weight:300;
+}
+.cp-timer{
+  font:600 12px/1 'IBM Plex Mono','Courier New',monospace;
+  color:#fdeec0;
+  letter-spacing:.08em;
+  min-width:58px;
+  text-align:left;
+}
+/* make card-vis position:relative if not already so the badge is contained */
+.card-vis{ position:relative; }
