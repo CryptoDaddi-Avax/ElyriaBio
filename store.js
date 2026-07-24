@@ -374,6 +374,7 @@ function withFlip(mutate){
 
 /* ===================== STATE ===================== */
 var cart = load("elyria_cart", {});
+var cartPacks = load("elyria_cart_packs", {}); // fixed pack totals from PDP — bypasses volumeRate
 var favs = load("elyria_favs", {});
 var recent = load("elyria_recent", []);
 var appliedCode = load("elyria_promo", "");
@@ -623,10 +624,13 @@ function addToCart(id, qty, btn){
 }
 function setQty(id, qty){
   if(qty<=0) delete cart[id]; else cart[id]=qty;
+  // Clear any fixed pack total — user changed qty manually, so per-unit pricing resumes
+  delete cartPacks[id];
   save("elyria_cart", cart);
+  save("elyria_cart_packs", cartPacks);
   renderCart();
 }
-function removeItem(id){ delete cart[id]; save("elyria_cart", cart); renderCart(); }
+function removeItem(id){ delete cart[id]; delete cartPacks[id]; save("elyria_cart", cart); save("elyria_cart_packs", cartPacks); renderCart(); }
 
 var cartCount = document.getElementById("cartCount");
 var drawerItems = document.getElementById("drawerItems");
@@ -649,7 +653,7 @@ var sumTotal = document.getElementById("sumTotal");
 function volumeRate(q){ return q>=5 ? 0.25 : (q>=3 ? 0.15 : 0); }
 function computeTotals(){
   var ids = Object.keys(cart), count=0, subtotal=0, volume=0;
-  ids.forEach(function(key){ var kp=keyProduct(key); if(!kp)return; var q=cart[key]; count+=q; var line=kp.price*q; subtotal+=line; volume+=line*volumeRate(q); });
+  ids.forEach(function(key){ var kp=keyProduct(key); if(!kp)return; var q=cart[key]; count+=q; var pt=cartPacks[key]; var line=pt!=null?pt:kp.price*q; subtotal+=line; volume+=pt!=null?0:line*volumeRate(q); });
   var code = CODES[appliedCode], promoDisc=0, shipFree=false;
   if(code){
     if(code.type==="pct") promoDisc = (subtotal-volume)*code.val;
@@ -695,6 +699,8 @@ function renderCart(){
   var html = "";
   t.ids.forEach(function(key){
     var kp = keyProduct(key), p = kp.p, q = cart[key], price = kp.price;
+    var pt = cartPacks[key]; // fixed pack total override from PDP
+    var lineTotal = pt!=null ? pt : price*q;
     var was = (!splitKey(key).mg && p.compareAt && p.compareAt>p.price) ? '<span class="was">'+fmt(p.compareAt*q)+'</span>' : '';
     html +=
       '<div class="line-item">'+
@@ -711,7 +717,7 @@ function renderCart(){
             '<button class="li-remove" data-remove="'+key+'">Remove</button>'+
           '</div>'+
         '</div>'+
-        '<div class="li-price"><span class="now">'+fmt(price*q)+'</span>'+was+'</div>'+
+        '<div class="li-price"><span class="now">'+fmt(lineTotal)+'</span>'+was+'</div>'+
       '</div>';
   });
   drawerItems.innerHTML = html;
@@ -1023,6 +1029,7 @@ function placeOrder(t, ship, grand){
   save("elyria_orders_guest", guestOrders);
   // clear cart + promo
   cart = {}; save("elyria_cart", cart);
+  cartPacks = {}; save("elyria_cart_packs", cartPacks);
   appliedCode = ""; save("elyria_promo", "");
   save("elyria_has_ordered", 1);
   if(ruoAck) ruoAck.checked = false;

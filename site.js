@@ -92,11 +92,18 @@ function toast(html, ms){
 })();
 
 /* ---- shared add-to-cart for product pages ---- */
-window.elyriaAdd = function(id, qty, name, btn){
+window.elyriaAdd = function(id, qty, name, btn, packTotal){
   qty = qty||1;
   var cart = load("elyria_cart", {});
   cart[id] = (cart[id]||0) + qty;
   save("elyria_cart", cart);
+  // If a fixed pack total is provided, store it so the cart uses it directly
+  // instead of applying the automatic volume discount on top (which would double-discount)
+  if(packTotal != null && qty > 1){
+    var packs = load("elyria_cart_packs", {});
+    packs[id] = packTotal;
+    save("elyria_cart_packs", packs);
+  }
   paintCart(true);
   if(cartBtn){ cartBtn.classList.remove("pulse"); void cartBtn.offsetWidth; cartBtn.classList.add("pulse"); }
   if(btn){

@@ -348,7 +348,7 @@ liveBtn.setAttribute("data-q", t.q);
 addBtn.addEventListener("click", function(){
 var data=STRENGTHS[curMg].tiers, t=data.filter(function(x){return x.q===curQ;})[0]||data[0];
 var liveBtn=document.getElementById("pdpAdd")||addBtn;
-if(window.elyriaAdd) window.elyriaAdd(curMg===20?"motsc":"motsc|"+curMg, t.q, "MOTS-c \u00b7 "+curMg+" mg", liveBtn);
+if(window.elyriaAdd) window.elyriaAdd(curMg===20?"motsc":"motsc|"+curMg, t.q, "MOTS-c \u00b7 "+curMg+" mg", liveBtn, t.q>1 ? t.total : null);
 });
 Array.prototype.slice.call(sTiers.querySelectorAll(".stier")).forEach(function(s){
 s.addEventListener("click", function(){
