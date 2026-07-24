@@ -874,6 +874,19 @@ function payOptionsHTML(){
   }).join("");
 }
 function orderSeq(){ var n=load("elyria_order_seq", 1041)+1; save("elyria_order_seq", n); return n; }
+/* Generate a globally unique order ID — unlike orderSeq(), this is not per-browser.
+   Format: EB-YYMMDD-XXXXXX  (36^6 = 2.18B combos/day → collision-proof for any real volume)
+   Example: EB-260724-K2P9ML */
+function genOrderId(){
+  var now = new Date();
+  var yy = String(now.getFullYear()).slice(2);
+  var mm = String(now.getMonth()+1).padStart(2,'0');
+  var dd = String(now.getDate()).padStart(2,'0');
+  var chars = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ'; // 34 unambiguous chars (no I/O confusion)
+  var rand = '';
+  for(var i=0;i<6;i++) rand += chars[Math.floor(Math.random()*chars.length)];
+  return 'EB-'+yy+mm+dd+'-'+rand;
+}
 function itemLot(id){ var kp=keyProduct(id); return kp?lotInfo(kp.p).lot:""; }
 function openCheckout(){
   var t = computeTotals();
@@ -986,8 +999,7 @@ function placeOrder(t, ship, grand){
   };
   if(shipTo) save("elyria_shipto", shipTo);
   var seq = orderSeq();
-  var lotChar = "ABCDEF"[seq%6];
-  var oid = "LMB-26"+lotChar+"-"+seq;
+  var oid = genOrderId();
   var now = new Date();
   var order = {
     id: oid,
