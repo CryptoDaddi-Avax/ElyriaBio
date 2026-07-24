@@ -367,6 +367,7 @@
     { k: "delivered", name: "Delivered", ic: "<svg viewBox='0 0 24 24' fill='none' stroke-width='2'><path d='M20 6L9 17l-5-5'/></svg>" }
   ];
   function openOrder(id) {
+    state = D.load(); // refresh to pick up proofs/status changes since page load
     var o = state.orders.filter(function (x) { return x.id === id; })[0];
     if (!o) return;
     var lot = state.lots.filter(function (l) { return l.productId === o.items[0].id; })[0] || state.lots[0];
@@ -391,6 +392,19 @@
       + (cancelled ? "<div class='alert-item neg'><span class='ai-ic'><svg viewBox='0 0 24 24' fill='none' stroke-width='1.7'><path d='M18 6L6 18M6 6l12 12'/></svg></span><div class='ai-body'><div class='ai-title'>Order cancelled</div></div></div>" : "<div class='flow'>" + flowHtml + "</div>") + "</div>";
 
     body += "<div class='d-section'><span class='micro'>Update status</span><div style='display:flex;gap:9px'><select class='sel' id='drawerStatus' style='flex:1'>" + statusOptions + "</select><button class='abtn solid' id='drawerSave'>Save</button></div></div>";
+
+    // Payment proof — the most critical section for verification
+    if(o.pay){
+      var PAY_NAMES = {btc:"Bitcoin",eth:"Ethereum",usdc:"USDC",venmo:"Venmo",xpay:"X Payments"};
+      var txRef = o.proof && o.proof.ref ? o.proof.ref : null;
+      var txImg = o.proof && o.proof.img ? o.proof.img : null;
+      body += "<div class='d-section'><span class='micro'>Payment</span>"
+        + "<div class='d-line'><span class='dl-k'>Method</span><span class='dl-v'>" + esc(PAY_NAMES[o.pay] || o.pay) + "</span></div>"
+        + (txRef ? "<div class='d-line'><span class='dl-k'>Tx\ Hash</span><span class='dl-v' style='font-family:IBM\ Plex\ Mono,monospace;font-size:11px;word-break:break-all;user-select:all'>" + esc(txRef) + "</span></div>" : "<div class='d-line'><span class='dl-k'>Tx\ Hash</span><span class='dl-v t-mut'>Not\ yet\ submitted</span></div>")
+        + (txImg ? "<div class='d-line'><span class='dl-k'>Proof</span><span class='dl-v'><img src='" + txImg + "' alt='Payment screenshot' style='max-width:160px;max-height:100px;border-radius:6px;cursor:zoom-in;border:1px solid rgba(255,255,255,0.1)' onclick=\"window.open(this.src)\"\></span></div>" : "")
+        + "<div class='d-line'><span class='dl-k'>Status</span><span class='dl-v'><span class='pill pay-" + (o.payState||'awaiting') + "'>" + (o.payState||'awaiting') + "</span></span></div>"
+        + "</div>";
+    }
 
     body += "<div class='d-section'><span class='micro'>Items</span>" + itemsHtml + "</div>";
 

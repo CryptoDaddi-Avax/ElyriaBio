@@ -405,6 +405,8 @@
         items: items,
         pay: o.pay || "",
         payState: o.payState || "awaiting",
+        proof: o.proof || null,
+        shipTo: o.shipTo || null,
         state: extractRegion(o.shipTo && o.shipTo.csz),
         country: "US",
         source: "Storefront",

@@ -69,7 +69,15 @@ function fmtUSD(n){ return "$"+(n||0).toFixed(2); }
 /* ---------- order storage helpers ---------- */
 function getOrders(){ return loadLS("elyria_orders", []); }
 function updateOrder(id, fn){
-  var orders = getOrders();
+  // Guest checkout orders live in elyria_orders_guest — check there first
+  var guestOrders = loadLS("elyria_orders_guest", []);
+  var foundGuest = false;
+  for(var i=0;i<guestOrders.length;i++){
+    if(guestOrders[i].id===id){ fn(guestOrders[i]); foundGuest=true; break; }
+  }
+  if(foundGuest){ saveLS("elyria_orders_guest", guestOrders); return guestOrders; }
+  // Fall back to elyria_orders (logged-in orders)
+  var orders = loadLS("elyria_orders", []);
   for(var i=0;i<orders.length;i++){ if(orders[i].id===id){ fn(orders[i]); break; } }
   saveLS("elyria_orders", orders);
   return orders;
