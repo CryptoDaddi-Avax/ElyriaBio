@@ -349,7 +349,7 @@ liveBtn.setAttribute("data-q", t.q);
 addBtn.addEventListener("click", function(){
 var data=STRENGTHS[curMg].tiers, t=data.filter(function(x){return x.q===curQ;})[0]||data[0];
 var liveBtn=document.getElementById("pdpAdd")||addBtn;
-if(window.elyriaAdd) window.elyriaAdd("reta", t.q, "GLP-3 · "+curMg+" mg", liveBtn);
+if(window.elyriaAdd) window.elyriaAdd(curMg===10?"reta":"reta|"+curMg, t.q, "GLP-3 \u00b7 "+curMg+" mg", liveBtn);
 });
 Array.prototype.slice.call(sTiers.querySelectorAll(".stier")).forEach(function(s){
 s.addEventListener("click", function(){
