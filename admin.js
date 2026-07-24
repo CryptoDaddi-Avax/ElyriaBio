@@ -420,16 +420,22 @@
       + "<div class='d-line'><span class='dl-k'>Ship to</span><span class='dl-v'>" + esc(o.state) + ", " + esc(o.country) + "</span></div>"
       + "<div class='d-line'><span class='dl-k'>Source</span><span class='dl-v'>" + o.source + "</span></div></div>";
 
-    body += "<div class='d-section'><span class='micro'>Lot & certificate</span><div class='coa-mini'>"
-      + "<div style='display:flex;align-items:center;justify-content:space-between'><span class='t-strong'>" + lot.product + "</span><span class='pill released'>COA on file</span></div>"
-      + "<div class='coa-mini-grid'>"
-      + "<div><div class='cmg-k'>Lot</div><div class='cmg-v'>" + o.lot + "</div></div>"
-      + "<div><div class='cmg-k'>HPLC purity</div><div class='cmg-v'>" + lot.purity + "</div></div>"
-      + "<div><div class='cmg-k'>Endotoxin</div><div class='cmg-v'>" + lot.endo + "</div></div>"
-      + "<div><div class='cmg-k'>Identity</div><div class='cmg-v'>" + lot.identity + "</div></div>"
-      + "<div><div class='cmg-k'>Lab</div><div class='cmg-v'>" + lot.lab + "</div></div>"
-      + "<div><div class='cmg-k'>Released</div><div class='cmg-v'>" + lot.released + "</div></div>"
-      + "</div></div></div>";
+    if(lot){
+      body += "<div class='d-section'><span class='micro'>Lot &amp; certificate</span><div class='coa-mini'>"
+        + "<div style='display:flex;align-items:center;justify-content:space-between'><span class='t-strong'>" + lot.product + "</span><span class='pill released'>COA on file</span></div>"
+        + "<div class='coa-mini-grid'>"
+        + "<div><div class='cmg-k'>Lot</div><div class='cmg-v'>" + o.lot + "</div></div>"
+        + "<div><div class='cmg-k'>HPLC purity</div><div class='cmg-v'>" + lot.purity + "</div></div>"
+        + "<div><div class='cmg-k'>Endotoxin</div><div class='cmg-v'>" + lot.endo + "</div></div>"
+        + "<div><div class='cmg-k'>Identity</div><div class='cmg-v'>" + lot.identity + "</div></div>"
+        + "<div><div class='cmg-k'>Lab</div><div class='cmg-v'>" + lot.lab + "</div></div>"
+        + "<div><div class='cmg-k'>Released</div><div class='cmg-v'>" + lot.released + "</div></div>"
+        + "</div></div></div>";
+    } else {
+      body += "<div class='d-section'><span class='micro'>Lot numbers</span>"
+        + o.items.map(function(it){ return "<div class='d-line'><span class='dl-k'>" + esc(it.name) + "</span><span class='dl-v' style='font-family:IBM Plex Mono,monospace;font-size:11px'>" + esc(it.lot||'—') + "</span></div>"; }).join("")
+        + "</div>";
+    }
 
     body += "<div class='d-section'><div class='btn-row'>"
       + "<button class='abtn ghost' data-act='print'><svg viewBox='0 0 24 24' fill='none' stroke-width='1.7'><path d='M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z'/></svg>Packing slip</button>"
