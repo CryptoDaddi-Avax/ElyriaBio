@@ -198,6 +198,8 @@
      ============================================================ */
   var ordFilter = { status: "all", q: "", sort: "ts", dir: -1 };
   function renderOrders() {
+    // Refresh state so orders placed after this page loaded appear immediately
+    state = D.load();
     var v = $("#view-orders");
     var counts = {}; D.STATUSES.forEach(function (s) { counts[s] = 0; });
     state.orders.forEach(function (o) { counts[o.status]++; });
@@ -254,7 +256,10 @@
   var PAY_META = { btc: ["\u20BF", "Bitcoin"], eth: ["\u039E", "Ethereum"], usdc: ["$", "USDC"], venmo: ["V", "Venmo"] };
   var DEMO_PAY = [];
   function payRowsAll() {
-    var live = lsGet("elyria_orders", []).filter(function (o) { return o.pay; }).map(function (o) {
+    // Read from both storefront order keys — guest checkout → elyria_orders_guest
+    var guestOrders = lsGet("elyria_orders_guest", []);
+    var loggedOrders = lsGet("elyria_orders", []);
+    var live = guestOrders.concat(loggedOrders).filter(function (o) { return o.pay; }).map(function (o) {
       return {
         id: o.id, cust: o.email ? o.email.split("@")[0] : "Storefront order", email: o.email || "\u2014",
         method: o.pay, total: o.total || 0,
@@ -322,17 +327,21 @@
     }).join("");
   }
   function payDecide(id, ok) {
+    var updated = false;
+    // Handle guest orders (storefront checkout writes here)
+    var guestOrders = lsGet("elyria_orders_guest", []);
+    guestOrders.forEach(function (o) {
+      if (o.id === id) { updated = true; if (ok) { o.status = "confirmed"; } else { o.payState = "awaiting"; delete o.proof; } }
+    });
+    if (updated) { lsSet("elyria_orders_guest", guestOrders); }
+    // Also handle any logged-in orders stored under elyria_orders
     var orders = lsGet("elyria_orders", []);
     var live = false;
     orders.forEach(function (o) {
-      if (o.id === id) {
-        live = true;
-        if (ok) { o.status = "confirmed"; }
-        else { o.payState = "awaiting"; delete o.proof; }
-      }
+      if (o.id === id) { live = true; if (ok) { o.status = "confirmed"; } else { o.payState = "awaiting"; delete o.proof; } }
     });
     if (live) { lsSet("elyria_orders", orders); }
-    else {
+    if (!updated && !live) {
       var ovr = lsGet("elyria_admin_paydemo", {});
       ovr[id] = ok ? "confirmed" : "awaiting";
       lsSet("elyria_admin_paydemo", ovr);
@@ -423,6 +432,12 @@
     $("#drawerSave").addEventListener("click", function () {
       var ns = $("#drawerStatus").value;
       o.status = ns; state.statusOverrides[o.id] = ns; D.persist(state);
+      // Also persist status back to elyria_orders_guest for guest orders
+      if (o.guest) {
+        var gOrders = lsGet("elyria_orders_guest", []);
+        gOrders.forEach(function (g) { if (g.id === o.id) g.status = ns; });
+        lsSet("elyria_orders_guest", gOrders);
+      }
       toast("Order " + o.id + " → " + ns);
       closeDrawer(); paintOrders(); refreshBadges();
     });

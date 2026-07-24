@@ -337,6 +337,7 @@
 
     var discounts = (saved && saved.discounts) ? saved.discounts : JSON.parse(JSON.stringify(DISCOUNTS));
     var stockOverrides = (saved && saved.stockOverrides) || {};
+    var statusOverrides = (saved && saved.statusOverrides) || {};
 
     // Stock starts at 0 — real numbers come from Supabase
     var products = PRODUCTS.map(function (p) {
@@ -356,10 +357,65 @@
       return base;
     });
 
+    /* ---- Load real storefront orders from localStorage ---- */
+    var prodNameMap = {};
+    PRODUCTS.forEach(function (p) { prodNameMap[p.id] = p.name; });
+
+    function storeStatusToAdmin(o) {
+      var s = o.status;
+      if (s === "shipped" || s === "transit") return "shipped";
+      if (s === "delivered") return "delivered";
+      if (s === "confirmed") return "paid";
+      return "verifying"; // "pending" = awaiting payment / verification
+    }
+    function extractRegion(csz) {
+      if (!csz) return "US";
+      var m = csz.match(/,\s*([A-Z]{2})\s/);
+      return m ? m[1] : csz.slice(0, 8);
+    }
+
+    var guestRaw = [];
+    try { var g = localStorage.getItem("elyria_orders_guest"); if (g) guestRaw = JSON.parse(g); } catch (e) {}
+
+    var realOrders = guestRaw.map(function (o) {
+      var items = (o.items || []).map(function (it) {
+        var bareId = it.id && it.id.indexOf("|") > -1 ? it.id.split("|")[0] : (it.id || "");
+        return {
+          id: bareId,
+          name: prodNameMap[bareId] || bareId || "Item",
+          qty: it.qty || 1,
+          lot: it.lot || "—",
+          size: it.size || "—",
+          price: it.price || 0
+        };
+      });
+      var autoStatus = storeStatusToAdmin(o);
+      return {
+        id: o.id,
+        ts: o.ts || Date.now(),
+        status: statusOverrides[o.id] || autoStatus,
+        custName: (o.shipTo && o.shipTo.name) ? o.shipTo.name : (o.email ? o.email.split("@")[0] : "Guest"),
+        email: o.email || "—",
+        lot: items.length > 0 ? (items[0].lot || "—") : "—",
+        total: o.total || 0,
+        sub: (o.total || 0) + (o.discount || 0),
+        disc: o.discount || 0,
+        ship: o.shipCost || 0,
+        code: o.code || "",
+        items: items,
+        pay: o.pay || "",
+        payState: o.payState || "awaiting",
+        state: extractRegion(o.shipTo && o.shipTo.csz),
+        country: "US",
+        source: "Storefront",
+        guest: true
+      };
+    });
+
     return {
-      orders: [], customers: [], lots: [], affiliates: [], applications: [],
+      orders: realOrders, customers: [], lots: [], affiliates: [], applications: [],
       tiers: AFF_TIERS, products: products, discounts: discounts,
-      statusOverrides: {}, affOverrides: {}, approvedApps: {}, strikes: {},
+      statusOverrides: statusOverrides, affOverrides: {}, approvedApps: {}, strikes: {},
       stockOverrides: stockOverrides
     };
   }
